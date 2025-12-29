@@ -1,0 +1,30 @@
+Episode ID: ai_daily_2025_11_18
+Title: Back to Basics with Kaiming He
+
+[HOST]: Welcome back to AI Research Daily. I'm Kochi. Today, we have a fascinating conceptual breakthrough from one of the legends of deep learning, Kaiming He. You might know him as the inventor of ResNet. Well, he's back, and he's challenging the way we think about diffusion models.
+
+The paper is titled "Back to Basics: Let Denoising Generative Models Denoise". It's co-authored with Tianhong Li.
+
+So, here's the gist. Most modern diffusion models, like Stable Diffusion or DALL-E, work by predicting the noise. You take an image, add noise to it, and train the model to predict what noise was added. Then, to generate an image, you start with pure noise and subtract the predicted noise step by step.
+
+Kaiming He argues that this is actually a bit roundabout. He says we should just predict the clean image directly.
+
+[HOST]: Now, you might ask, "Why haven't we been doing that?" Well, historically, predicting the clean image directly didn't work as well. It was unstable. But Kaiming He's team found a way to make it work using a very simple architecture they call "Just image Transformers" or JiT.
+
+They use large patches—like 16 by 16 or even 32 by 32 pixels—and feed them into a standard Transformer. No tokenizer, no VAE, no complex pre-training. Just raw pixels.
+
+[HOST]: The key insight relies on the "manifold assumption". This is the idea that natural images live on a low-dimensional "manifold" inside the high-dimensional space of all possible pixel combinations.
+
+When you add noise to an image, you push it off this manifold. Kaiming He shows that if you just train a network to map that noisy point back to the nearest point on the manifold (the clean image), it works surprisingly well.
+
+They achieved competitive results on ImageNet with this approach. It's not beating the absolute state-of-the-art yet, but it's much simpler and more interpretable.
+
+[HOST]: Why does this matter for you?
+
+If you're a researcher, it suggests we might have overcomplicated things. We might not need all these complex noise schedules and samplers.
+
+If you're a founder or building products, this could lead to faster, more efficient models. Direct prediction can be computationally cheaper than iterative noise prediction. It also opens the door to better understanding what these models are actually learning.
+
+[HOST]: That's the big idea for today. Kaiming He says: stop predicting noise, start predicting data. It's a return to first principles.
+
+Check out the full paper on arXiv. The link is in the show notes. I'll see you tomorrow.

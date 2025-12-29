@@ -1,0 +1,50 @@
+[
+  {
+    "case": {
+      "episode_id": "ai-research-daily-2025-11-20",
+      "mode": "plain_english",
+      "question": "Explain Kandinsky 5.0 in simple language.",
+      "description": "Basic plain explanation of main model."
+    },
+    "answer": "### Explanation\n\nKandinsky 5.0 is a powerful family of foundation models designed for generating images and videos. Think of it as a super-smart artist who can create detailed pictures or short films based on simple instructions. This model uses advanced techniques to understand the context, style, and details needed to produce high-quality visual content.\n\n### Analogy\n\nImagine you're giving directions to an AI artist. Instead of just telling it \"draw a cat,\" Kandinsky 5.0 can be instructed with more detail like \"draw a black cat sitting on a red chair in a cozy living room.\" The model then uses its vast knowledge and training to create a realistic image that closely matches your description.\n\nThis episode excerpt does not give enough detail to answer that.",
+    "checks": {
+      "has_structure": true,
+      "has_citation": false
+    },
+    "passed": false
+  },
+  {
+    "case": {
+      "episode_id": "ai-research-daily-2025-11-20",
+      "mode": "founder_takeaway",
+      "question": "What products could I build from Kandinsky 5.0?",
+      "description": "Founder opportunities from main paper."
+    },
+    "answer": "Big Idea: Leverage Kandinsky 5.0's real-time capabilities to democratize image generation for non-technical users and small businesses.\n\nProduct Directions:\n1. Target user: Non-technical users and small businesses.\n   Core value: Instantly generate professional-quality images without design expertise.\n   How this paper enables it: Kandinsky 5.0’s speed allows for real-time, interactive image creation.\n   Moat / defensibility: Customizable prompts and templates tailored to specific industries.\n\nWhy this paper (vs others): The real-time generation feature is a key differentiator, making the tool accessible to non-technical users who need quick visual content.\n\nRisks & Unknowns:\n- Model quality might be lower compared to larger models used in professional design tools.\n- Ensuring user satisfaction with generated images could require extensive testing and feedback loops.",
+    "checks": {
+      "has_big_idea": true,
+      "has_product_directions": true,
+      "has_risks": true,
+      "has_citation": false
+    },
+    "passed": false
+  },
+  {
+    "case": {
+      "episode_id": "ai-research-daily-2025-11-20",
+      "mode": "engineer_angle",
+      "question": "What are the key architecture and training ideas in Kandinsky 5.0?",
+      "description": "Engineer detail about architecture."
+    },
+    "answer": "This episode excerpt does not give enough detail to answer that. The provided context focuses on the key innovation and potential impact of Kandinsky 5.0 but lacks specific architectural and training details necessary for a comprehensive answer.",
+    "checks": {
+      "has_core_principle": true,
+      "has_architecture": true,
+      "has_training": true,
+      "has_inference": true,
+      "has_tradeoffs": true,
+      "has_citation": false
+    },
+    "passed": false
+  }
+]

@@ -1,0 +1,44 @@
+Episode ID: ai_daily_2025_11_18
+Title: AI Research Daily 11/18
+
+[HOST]: Welcome to AI Research Daily. Today is November 18th, 2025.
+
+Executive Summary:
+Kaiming He returns with a conceptual breakthrough in diffusion models advocating direct denoising over noise prediction. Novel multi-agent communication achieves 91% on HumanEval using just 6.25M tokens via auction-based resource allocation. Industrial AI sees three papers applying LLMs and causal inference to real foundry operations.
+
+Top Papers Today:
+
+1. Back to Basics: Let Denoising Generative Models Denoise
+Authors: Tianhong Li, Kaiming He
+Why this matters: Kaiming He (ResNet inventor) challenges the fundamental paradigm of diffusion models. Current models predict noise or noised quantities; this paper argues we should predict clean data directly, leveraging the manifold assumption that natural data lies on low-dimensional manifolds. Conceptually simple but potentially transformative.
+Key Innovation: "Just image Transformers" (JiT) uses large-patch Transformers (patches of 16-32) on raw pixels with no tokenizer, pre-training, or extra losses. Direct clean data prediction allows under-capacity networks to operate effectively in high-dimensional spaces where noise prediction fails catastrophically.
+
+2. Cost-Effective Communication: An Auction-based Method for Language Agent Interaction
+Authors: Yijia Fan, Jusheng Zhang, Kaitong Cai, Jing Yang, Chengpei Tang, Jian Wang, Keze Wang
+Why this matters: Rising star Keze Wang's team tackles a critical efficiency problem in multi-agent LLM systems. "Free-for-all" communication leads to exponential token costs and low signal-to-noise ratios. Novel economic framework treats communication bandwidth as scarce, tradable resource.
+Key Innovation: Dynamic Auction-based Language Agent (DALA) treats inter-agent communication as centralized auction where agents bid for speaking opportunities based on predicted message value density. Agents learn strategic silence, adapting communication from verbosity to silence via resource constraints.
+
+3. Scaling Spatial Intelligence with Multimodal Foundation Models
+Authors: Zhongang Cai, Ruisi Wang, Chenyang Gu, Fanyi Pu, Junxiang Xu, and 20+ collaborators
+Why this matters: Addresses critical gap—multimodal foundation models still exhibit surprising spatial intelligence deficiencies. Systematic approach to cultivating spatial reasoning through principled data curation and rigorous taxonomy of spatial capabilities.
+Key Innovation: SenseNova-SI-8M dataset with 8 million diverse samples covering comprehensive spatial capability taxonomy. Built on established foundations (Qwen3-VL, InternVL3, Bagel) with systematic scaling approach analyzing emergent generalization, overfitting risks, and spatial chain-of-thought reasoning.
+
+4. Weight-sparse Transformers Have Interpretable Circuits
+Authors: Leo Gao, Achyuta Rajaram, Jacob Coxon, Soham V. Govande, Bowen Baker, Dan Mossing
+Why this matters: Central goal of mechanistic interpretability is finding human-understandable circuits in language models. This work achieves breakthrough by training models with most weights constrained to zero, so each neuron has only a few connections—producing unprecedented interpretability.
+Key Innovation: Train weight-sparse models where neurons contain interpretable natural concepts with straightforward connections between them. Prune models to isolate task-specific circuits. Analyzes capability-interpretability tradeoff, showing scaling improves the frontier but sparse models beyond tens of millions of parameters remain challenging.
+
+5. Multi-Agent Multimodal LLM Framework for Automated Fuel Efficiency Analytics
+Authors: Zhipeng Ma, Ali Rida Bahja, Andreas Burgdorf, André Pomp, Tobias Meisen, Bo Nørregaard Jørgensen, Zheng Grace Ma
+Why this matters: Led by prolific researcher Zhipeng Ma (3 papers today), demonstrates practical LLM application to real-world industrial problem. Traditional analytics yield fragmented outputs requiring extensive human interpretation—limiting scalability and consistency.
+Key Innovation: Multi-agent framework coordinates data narration agent, LLM-as-a-judge, and optional human-in-the-loop to iteratively transform analytical artifacts into coherent stakeholder-oriented reports. Validated on 4006 bus trips in Northern Jutland, Denmark using Gaussian Mixture Model clustering.
+
+6. 3DAlign-DAER: Fine-grained 3D-Text Alignment at Scale
+Authors: Yijia Fan, Jusheng Zhang, Kaitong Cai, Jing Yang, Jian Wang, Keze Wang
+Why this matters: Rising star Keze Wang's team addresses critical limitation—existing 3D-text alignment methods struggle with fine-grained semantics and degrade significantly at scale. Novel unified framework captures subtle correspondences for diverse cross-modal retrieval and classification.
+Key Innovation: Dynamic Attention Policy (DAP) with Hierarchical Attention Fusion represents alignment as learnable fine-grained token-to-point attentions, optimized via Monte Carlo tree search. Efficient Retrieval Strategy (ERS) enables hierarchical searching in large-scale embedding spaces, outperforming traditional methods (KNN) in accuracy and efficiency.
+
+7. Fairness-Aware Graph Learning with Limited Demographics
+Authors: Zichong Wang, Zhipeng Yin, Liping Yang, Jun Zhuang, Rui Yu, Qingzhao Kong, Wenbin Zhang
+Why this matters: Productive researcher Zichong Wang (2 fairness papers today) addresses critical gap—most fair graph learning methods assume full demographic access, rarely met in practice due to privacy, legal, or regulatory restrictions.
+Key Innovation: Novel framework generates demographic proxies guided by partial data, enforces consistent node embeddings across demographic groups, and uses adaptive confidence strategy dynamically adjusting each node's contribution to fairness and utility based on prediction confidence.
