@@ -68,29 +68,7 @@ To ensure the codebase is maintainable and testable, we strictly follow the **Re
 
 The system mimics a modern distributed application architecture, contained within a microservice.
 
-```mermaid
-graph TD
-    Client[Client UI / Mobile] -->|HTTPS| Gateway[FastAPI Gateway]
-    
-    subgraph "Application Core"
-        Gateway -->|Async| Orchestrator[Orchestrator Service]
-        Orchestrator -->|State| Repo[Repository Layer]
-        Orchestrator -->|Logic| Planner[Query Planner]
-    end
-
-    subgraph "Cognitive Pipeline"
-        Planner -->|1. Route| Router{Persona Router}
-        Router -->|2. Search| Hybrid[Hybrid Search (Vector + BM25)]
-        Hybrid -->|3. Fuse| RRF[RRF Ranker]
-        RRF -->|4. Generate| LLM[LLM Generator]
-        LLM -->|5. Verify| Critic[Hallucination Critic]
-    end
-
-    subgraph "Data Persistence"
-        Repo --> SQLite[(Relational DB)]
-        Hybrid --> Chroma[(Vector Store)]
-    end
-```
+<img width="617" height="1364" alt="ECA- Architecture" src="https://github.com/user-attachments/assets/8aea98c4-59f4-4fc5-8b3f-75a4691edc67" />
 
 ---
 
