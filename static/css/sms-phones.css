@@ -1,0 +1,324 @@
+    margin-bottom: 24px;
+    }
+
+    .kochi-sms-microcaption {
+        font-size: 14px;
+        color: var(--text-secondary);
+        margin-bottom: 16px;
+    }
+
+    .kochi-sms-microcaption strong {
+        color: var(--text-primary);
+    }
+
+    .kochi-sms-steps {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        color: var(--text-secondary);
+    }
+
+    .step-item strong {
+        color: var(--text-primary);
+    }
+
+    .sms-code {
+        background: rgba(167, 139, 250, 0.15);
+        color: var(--accent-bright);
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-family: 'Courier New', monospace;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .kochi-sms-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        color: var(--text-secondary);
+    }
+
+    .legend-emoji {
+        font-size: 16px;
+    }
+
+    .kochi-sms-footnote {
+        font-size: 12px;
+        color: var(--text-muted);
+        font-style: italic;
+        margin-top: 12px;
+    }
+
+    /* Phone cluster container */
+    .kochi-sms-phones-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 450px;
+    }
+
+    .phones-glow {
+        position: absolute;
+        width: 320px;
+        height: 320px;
+        background: radial-gradient(circle, rgba(102, 126, 234, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    .sms-phone-cluster {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        perspective: 1000px;
+    }
+
+    /* Individual ritual phone */
+    .kochi-ritual-phone {
+        width: 270px;
+        background: linear-gradient(135deg, rgba(34, 22, 62, 0.95) 0%, rgba(35, 21, 70, 0.95) 50%, rgba(20, 15, 43, 0.95) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 32px;
+        padding: 12px;
+        box-shadow: 0 24px 70px rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(20px);
+        animation: phoneFloat 8s ease-in-out infinite;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .kochi-ritual-phone:hover {
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 28px 80px rgba(102, 126, 234, 0.4);
+    }
+
+    .kochi-ritual-phone.phone-left {
+        transform: rotate(-4deg) translateY(-16px) translateX(-8px);
+    }
+
+    .kochi-ritual-phone.phone-center {
+        transform: scale(1.05);
+        z-index: 10;
+    }
+
+    .kochi-ritual-phone.phone-right {
+        transform: rotate(4deg) translateY(16px) translateX(8px);
+    }
+
+    /* Phone notch */
+    .phone-notch {
+        position: absolute;
+        top: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 96px;
+        height: 16px;
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 16px;
+    }
+
+    /* Phone header */
+    .phone-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 24px 12px 12px 12px;
+        margin-bottom: 8px;
+    }
+
+    .phone-header-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .phone-emoji-icon {
+        width: 28px;
+        height: 28px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+    }
+
+    .phone-label-block {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .phone-label {
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #f1f5f9;
+    }
+
+    .phone-tagline {
+        font-size: 10px;
+        color: rgba(226, 232, 240, 0.85);
+    }
+
+    .phone-badge {
+        background: rgba(52, 211, 153, 0.1);
+        color: rgba(52, 211, 153, 0.9);
+        font-size: 9px;
+        font-weight: 500;
+        padding: 4px 8px;
+        border-radius: 12px;
+        white-space: nowrap;
+    }
+
+    /* Chat body */
+    .phone-chat-body {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding: 8px 8px 12px 8px;
+        min-height: 280px;
+        max-height: 320px;
+        overflow-y: auto;
+    }
+
+    .phone-message {
+        padding: 12px 14px;
+        border-radius: 16px;
+        font-size: 11px;
+        line-height: 1.5;
+        max-width: 85%;
+        animation: messageFadeIn 0.4s ease forwards;
+        opacity: 0;
+    }
+
+    .phone-message.user-msg {
+        background: linear-gradient(135deg, rgb(102, 126, 234) 0%, rgb(118, 75, 162) 100%);
+        color: #ffffff;
+        align-self: flex-end;
+        border-bottom-right-radius: 4px;
+    }
+
+    .phone-message.kochi-msg {
+        background: rgba(255, 255, 255, 0.1);
+        color: #e2e8f0;
+        align-self: flex-start;
+        border-bottom-left-radius: 4px;
+    }
+
+    .phone-message.emphasis {
+        font-weight: 600;
+    }
+
+    /* Typing indicator */
+    .phone-typing-indicator {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 8px 12px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        width: fit-content;
+        margin-top: 4px;
+        animation: messageFadeIn 0.3s ease forwards;
+    }
+
+    .typing-dots {
+        display: flex;
+        gap: 3px;
+    }
+
+    .typing-dot {
+        width: 4px;
+        height: 4px;
+        background: #cbd5e1;
+        border-radius: 50%;
+        animation: typingBounce 1.4s ease-in-out infinite;
+    }
+
+    .typing-dot:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .typing-dot:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    .typing-label {
+        font-size: 10px;
+        color: rgba(203, 213, 225, 0.9);
+        margin-left: 4px;
+    }
+
+    /* Animations */
+    @keyframes phoneFloat {
+
+        0%,
+        100% {
+            transform: translateY(0px);
+        }
+
+        50% {
+            transform: translateY(-6px);
+        }
+    }
+
+    @keyframes messageFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(6px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes typingBounce {
+
+        0%,
+        60%,
+        100% {
+            transform: translateY(0);
+        }
+
+        30% {
+            transform: translateY(-4px);
+        }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .kochi-sms-section {
+            grid-template-columns: 1fr;
+        }
+
+        .sms-phone-cluster {
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .kochi-ritual-phone.phone-left,
+        .kochi-ritual-phone.phone-center,
+        .kochi-ritual-phone.phone-right {
+            transform: none;
+        }
+    }

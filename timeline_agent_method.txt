@@ -1,0 +1,130 @@
+﻿
+    def get_timeline_answer(
+        self,
+        episode_ids: List[str],
+        mode: str,
+        query: str,
+        debug: bool = False,
+    ) -> dict:
+        trace_id = str(uuid.uuid4())
+        start_time = time.time()
+
+        from repositories.episode_repository import EpisodeRepository
+
+        repo = EpisodeRepository()
+        episodes = []
+        for eid in episode_ids:
+            ep = repo.get_episode_by_id(eid)
+            if ep:
+                episodes.append(ep)
+
+        if not episodes:
+            return {
+                "episode_id": ",".join(episode_ids),
+                "mode": mode,
+                "answer": INSUFFICIENT_MSG,
+                "metadata": {
+                    "trace_id": trace_id,
+                    "latency_ms": 0.0,
+                    "stage_latency": {},
+                    "used_chunks": 0,
+                    "expanded_query": query,
+                    "quality_checks": {"error": "no_episodes_found"},
+                    "source_papers": [],
+                    "tokens_in": 0,
+                    "tokens_out": 0,
+                    "model": self.model_name,
+                    "question_type": "timeline",
+                    "debug": None,
+                    "suggested_followups": [],
+                },
+            }
+
+        context_parts = []
+        for ep in episodes:
+            header = f"[Episode {ep.episode_id} on {ep.date_str}] (overview)\n"
+            report = ep.report_text or ""
+            context_parts.append(header + report[:4000])
+
+        context_text = "\n\n---\n\n".join(context_parts)
+
+        timeline_prompt = f'''
+You are Kochi, an AI research radio host who has been covering multiple episodes.
+
+You will receive:
+- Context for several episodes (each with an episode id and date)
+- A user question about how they relate
+
+Your job:
+- Compare and contrast the episodes
+- Highlight recurring themes and key differences
+- Answer the question in a grounded, concrete way
+- Use simple language, but you may mention paper titles in square brackets.
+
+Episodes Context:
+{context_text}
+
+User Question:
+{query}
+
+Answer in 3-7 short paragraphs or bullet lists.
+'''
+
+        from langchain_core.output_parsers import StrOutputParser
+        from langchain_core.prompts import ChatPromptTemplate
+
+        chain = ChatPromptTemplate.from_template(timeline_prompt) | self.llm | StrOutputParser()
+
+        try:
+            try:
+                loop = asyncio.get_event_loop()
+            except RuntimeError:
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+
+            llm_start = time.time()
+            answer = loop.run_until_complete(self._generate_with_timeout(chain, {}))
+            llm_ms = (time.time() - llm_start) * 1000
+        except Exception as e:
+            logger.error(f"Timeline generation failed: {e}")
+            answer = INSUFFICIENT_MSG
+            llm_ms = 0.0
+
+        total_latency_ms = (time.time() - start_time) * 1000
+
+        tokens_in = len(context_text) // 4 if context_text else 0
+        tokens_out = len(answer) // 4
+
+        suggested_followups = [
+            "Summarize the main theme that connects these episodes.",
+            "What trend do you see across these episodes for founders?",
+            "What should an engineer focus on if they only have time to build one thing from this week?"
+        ]
+
+        metadata = {
+            "trace_id": trace_id,
+            "latency_ms": round(total_latency_ms, 2),
+            "stage_latency": {
+                "retrieval": 0.0,
+                "llm": round(llm_ms, 2),
+                "critic": 0.0,
+            },
+            "used_chunks": len(episodes),
+            "expanded_query": query,
+            "quality_checks": {"timeline_mode": True},
+            "source_papers": [],
+            "tokens_in": tokens_in,
+            "tokens_out": tokens_out,
+            "model": self.model_name,
+            "question_type": "timeline",
+            "debug": {"context_preview": context_text[:500]} if debug else None,
+            "suggested_followups": suggested_followups,
+        }
+
+        return {
+            "episode_id": ",".join(e.episode_id for e in episodes),
+            "mode": mode,
+            "answer": answer,
+            "metadata": metadata,
+        }
+

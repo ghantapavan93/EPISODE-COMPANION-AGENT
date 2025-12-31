@@ -1,0 +1,17 @@
+# Progress Snapshot (2025-11-22 06:22)
+
+All recent modifications have been persisted to disk:
+
+- Duplicate and unused files removed from the project.
+- `static/index.html` updated:
+  * `EPISODE_ID` set to `ai-research-daily-2025-11-18`.
+  * Query now uses the orchestrator `/query` endpoint with API‑key header and `user_id`/`episode_id` payload.
+- Stray Python processes terminated.
+- Server restart commands prepared (run from the project root).
+
+You can now start the server:
+```powershell
+cd "C:\Users\Pavan Kalyan\.gemini\antigravity\playground\metallic-kilonova\episode-companion-agent"
+uvicorn main:app --host 0.0.0.0 --port 8000
+```
+Then open the UI at `http://localhost:8000`.

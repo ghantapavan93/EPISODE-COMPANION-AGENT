@@ -1,0 +1,4727 @@
+<!DOCTYPE html>
+<!-- FILE-MARKER: This is the CURRENT index.html - if you see this, the file is serving correctly -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Research Daily - Companion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/design-system.css">
+    <link rel="stylesheet" href="/static/css/components.css">
+    <link rel="stylesheet" href="/static/css/sms-phones.css">
+    <style>
+        :root {
+            --bg-color: #0a0e27;
+            /* Deep space blue - matches canvas */
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0c0;
+            --accent: #6d28d9;
+            /* Purple accent */
+            --accent-light: #8b5cf6;
+            --border: rgba(100, 200, 255, 0.15);
+            --card-bg: rgba(19, 19, 43, 0.7);
+            --card-bg-solid: rgba(10, 14, 39, 0.85);
+            --modal-overlay: rgba(0, 0, 0, 0.7);
+            --glow-primary: rgba(139, 92, 246, 0.3);
+            --glow-secondary: rgba(100, 200, 255, 0.2);
+        }
+
+        /* Animated Background Canvas */
+        #kochiCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .kochi-shell {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px 0 80px;
+            box-sizing: border-box;
+        }
+
+        /* ============================================
+           KOCHI HEADER BAR
+           ============================================ */
+        .kochi-header {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            padding: 24px 0;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .kochi-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+        }
+
+        .kochi-logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .kochi-brand-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .kochi-name {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .kochi-tagline {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .sms-pill {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(100, 200, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            text-align: center;
+        }
+
+        .sms-pill strong {
+            color: #fff;
+        }
+
+        /* ============================================
+           HERO INTRO SECTION
+           ============================================ */
+        .hero-intro {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 48px;
+            padding: 40px 0 60px;
+            flex-direction: column;
+        }
+
+        .hero-content {
+            flex: 0 1 560px;
+            max-width: 560px;
+            text-align: center;
+        }
+
+        .hero-headline {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            line-height: 1.15;
+            margin: 0 0 20px 0;
+            color: #fff;
+        }
+
+        .hero-headline .gradient-text {
+            background: linear-gradient(135deg, #a5b4fc 0%, #c4b5fd 50%, #34d399 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-explainer {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin: 0 0 28px 0;
+        }
+
+        .hero-poem {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 28px;
+            align-items: center;
+        }
+
+        .poem-line {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+            color: rgba(226, 232, 240, 0.9);
+            opacity: 0;
+            animation: fadeSlideIn 0.6s ease forwards;
+        }
+
+        .poem-line:nth-child(1) { animation-delay: 0.2s; }
+        .poem-line:nth-child(2) { animation-delay: 0.35s; }
+        .poem-line:nth-child(3) { animation-delay: 0.5s; }
+        .poem-line:nth-child(4) { animation-delay: 0.65s; }
+
+        .poem-bullet {
+            color: #34d399;
+            font-size: 0.75rem;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 20px;
+            border-radius: 100px;
+            font-size: 0.9rem;
+            color: rgba(248, 250, 252, 0.95);
+            opacity: 0;
+            animation: fadeSlideIn 0.6s ease forwards;
+            animation-delay: 0.8s;
+        }
+
+        .hero-cta strong {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .hero-cta .phone-number {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-weight: 600;
+        }
+
+        /* Phone Preview */
+        .hero-phone {
+            flex: 0 0 280px;
+            opacity: 0;
+            animation: slideInRight 0.8s ease forwards;
+            animation-delay: 0.4s;
+        }
+
+        .phone-frame {
+            background: linear-gradient(160deg, rgba(27, 22, 53, 0.95) 0%, rgba(29, 22, 60, 0.95) 50%, rgba(18, 15, 43, 0.95) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 32px;
+            padding: 16px;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5), 0 0 40px rgba(139, 92, 246, 0.1);
+            position: relative;
+            overflow: hidden;
+            min-height: 430px;
+        }
+
+        .phone-notch {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+        }
+
+        .phone-statusbar {
+            margin-top: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.7rem;
+            letter-spacing: 0.08em;
+        }
+
+        .status-icons {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            font-size: 0.65rem;
+        }
+
+        .messages-inbox {
+            margin-top: 22px;
+            padding: 0 4px;
+            transition: opacity var(--duration-500) ease, transform var(--duration-500) ease;
+        }
+
+        .inbox-title {
+            font-size: 0.85rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 12px;
+        }
+
+        .inbox-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .inbox-card::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            border: 1px solid rgba(104, 211, 245, 0.6);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .inbox-card::before {
+            content: "";
+            position: absolute;
+            inset: -30%;
+            background: radial-gradient(circle, rgba(104, 211, 245, 0.35) 0%, transparent 60%);
+            opacity: 0;
+            animation: contactPulse 3s ease-in-out infinite;
+        }
+
+        .inbox-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .inbox-name {
+            color: #fff;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        .inbox-preview {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .inbox-time {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.45);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .phone-frame.contact-tapped .inbox-card {
+            transform: scale(0.98);
+            background: rgba(59, 130, 246, 0.15);
+        }
+
+        .phone-frame.contact-tapped .inbox-card::after {
+            opacity: 1;
+        }
+
+        .conversation-view {
+            margin-top: 6px;
+            opacity: 0;
+            transform: translateY(24px);
+            pointer-events: none;
+            transition: opacity var(--duration-500) ease, transform var(--duration-500) ease;
+        }
+
+        .phone-frame.conversation-active .conversation-view {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .phone-frame.conversation-active .messages-inbox {
+            opacity: 0;
+            transform: translateY(-24px);
+            pointer-events: none;
+        }
+
+        .conversation-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 10px 12px;
+        }
+
+        .back-pill {
+            border: none;
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            border-radius: 12px;
+            padding: 6px 10px;
+            font-size: 0.75rem;
+        }
+
+        .contact-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .contact-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #7c3aed, #34d399);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .contact-name {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .contact-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .contact-actions .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #34d399;
+            box-shadow: 0 0 10px rgba(52, 211, 153, 0.8);
+        }
+
+        .imessage-log {
+            margin-top: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .imessage-bubble {
+            padding: 12px 14px;
+            border-radius: 18px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            max-width: 85%;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 0.35s ease, transform 0.35s ease;
+        }
+
+        .imessage-bubble.bubble-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .imessage-bubble.user {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .imessage-bubble.kochi {
+            align-self: flex-end;
+            margin-left: auto;
+            background: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%);
+            color: #fff;
+        }
+
+        .bubble-label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            opacity: 0.7;
+            margin-bottom: 4px;
+        }
+
+        .bubble-text {
+            font-size: 0.88rem;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            padding: 10px 14px;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .typing-indicator.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.7);
+            animation: typingDot 1.2s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.15s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.3s; }
+
+        .phone-cta-chips {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+            opacity: 0;
+            transform: translateY(6px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .phone-cta-chips.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .phone-cta-chips a {
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes contactPulse {
+            0%, 100% { opacity: 0; transform: scale(0.9); }
+            50% { opacity: 0.35; transform: scale(1); }
+        }
+
+        @keyframes typingDot {
+            0%, 100% { transform: translateY(0); opacity: 0.4; }
+            50% { transform: translateY(-3px); opacity: 1; }
+        }
+
+        /* ============================================
+           TEXT FIRST, WEB SECOND SECTION
+           ============================================ */
+        .text-first-section {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 48px;
+            padding: 40px 0 60px;
+            /* Section slides in from left */
+            opacity: 0;
+            animation: slideInFromLeft 0.8s ease forwards;
+            animation-delay: 0.3s;
+        }
+
+        .text-first-content {
+            flex: 1;
+            max-width: 400px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeSlideIn 0.7s ease forwards;
+            animation-delay: 0.5s;
+        }
+
+        .section-eyebrow {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent-light);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .text-first-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin: 0 0 16px 0;
+            color: #fff;
+        }
+
+        .text-first-body {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        /* Chat Cards Container */
+        .chat-cards-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .chat-card {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(100, 200, 255, 0.12);
+            border-radius: 20px;
+            padding: 20px;
+            width: 100%;
+            max-width: 600px;
+            /* Float animation with different speeds for organic feel */
+            animation: floatCard 4s ease-in-out infinite, cardEntrance 0.6s ease forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .chat-card:nth-child(1) {
+            animation-delay: 0.6s, 0.6s;
+        }
+
+        .chat-card:nth-child(2) {
+            animation-delay: -2s, 0.8s;
+        }
+
+        .chat-card-header {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            margin-bottom: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Emoji bounce on hover */
+        .chat-card-header .card-emoji {
+            display: inline-block;
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .chat-card:hover .card-emoji {
+            transform: scale(1.3) rotate(-5deg);
+        }
+
+        .chat-card-messages {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        /* Staggered bubble appearance - mimics chat history */
+        .chat-bubble {
+            padding: 10px 14px;
+            border-radius: 14px;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            max-width: 90%;
+            opacity: 0;
+            animation: bubbleAppear 0.4s ease forwards;
+        }
+
+        .chat-card:nth-child(1) .chat-bubble:nth-child(1) { animation-delay: 0.8s; }
+        .chat-card:nth-child(1) .chat-bubble:nth-child(2) { animation-delay: 1.0s; }
+        .chat-card:nth-child(1) .chat-bubble:nth-child(3) { animation-delay: 1.2s; }
+        .chat-card:nth-child(1) .chat-bubble:nth-child(4) { animation-delay: 1.4s; }
+
+        .chat-card:nth-child(2) .chat-bubble:nth-child(1) { animation-delay: 1.0s; }
+        .chat-card:nth-child(2) .chat-bubble:nth-child(2) { animation-delay: 1.2s; }
+        .chat-card:nth-child(2) .chat-bubble:nth-child(3) { animation-delay: 1.4s; }
+        .chat-card:nth-child(2) .chat-bubble:nth-child(4) { animation-delay: 1.6s; }
+
+        .chat-bubble.user-bubble {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.85) 0%, rgba(236, 72, 153, 0.85) 100%);
+            align-self: flex-end;
+            margin-left: auto;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.2);
+        }
+
+        .chat-bubble.kochi-bubble {
+            background: rgba(255, 255, 255, 0.08);
+            align-self: flex-start;
+            color: rgba(226, 232, 240, 0.95);
+        }
+
+        /* Typing indicator */
+        .typing-indicator-chat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 10px 14px;
+            opacity: 0;
+            animation: bubbleAppear 0.4s ease forwards;
+        }
+
+        .chat-card:nth-child(1) .typing-indicator-chat { animation-delay: 1.6s; }
+        .chat-card:nth-child(2) .typing-indicator-chat { animation-delay: 1.8s; }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: rgba(139, 92, 246, 0.6);
+            border-radius: 50%;
+            animation: typingPulse 1.4s ease-in-out infinite;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: 0s; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        .typing-label {
+            font-size: 0.7rem;
+            color: rgba(139, 92, 246, 0.7);
+            margin-left: 6px;
+            font-style: italic;
+        }
+
+        /* ============================================
+           ANIMATIONS
+           ============================================ */
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes bubbleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @keyframes bubbleAppear {
+            from {
+                opacity: 0;
+                transform: translateY(8px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes cardEntrance {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes floatCard {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+
+        @keyframes typingPulse {
+            0%, 60%, 100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            30% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-intro {
+                flex-direction: column;
+                text-align: center;
+                gap: 32px;
+            }
+
+            .hero-content {
+                max-width: 100%;
+            }
+
+            .hero-headline {
+                font-size: 2rem;
+            }
+
+            .hero-poem {
+                align-items: center;
+            }
+
+            .hero-phone {
+                flex: none;
+                width: 100%;
+                max-width: 280px;
+            }
+
+            .text-first-section {
+                flex-direction: column;
+                gap: 32px;
+            }
+
+            .text-first-content {
+                max-width: 100%;
+                text-align: center;
+            }
+        }
+
+        /* ============================================
+           EPISODE CARD - Matches Screenshot
+           ============================================ */
+        .episode-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .episode-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 0 0 12px 0;
+            color: #fff;
+        }
+
+        .episode-description {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin: 0 0 24px 0;
+        }
+
+        .audio-interactive-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .audio-player {
+            flex: 1;
+        }
+
+        .audio-player audio {
+            width: 100%;
+            height: 40px;
+            border-radius: 8px;
+        }
+
+        /* Style the audio player for dark theme */
+        .audio-player audio::-webkit-media-controls-panel {
+            background: rgba(30, 41, 59, 0.8);
+        }
+
+        .episode-teaser {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin: 0 0 20px 0;
+            line-height: 1.5;
+        }
+
+        .papers-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .paper-link {
+            font-size: 0.9rem;
+            color: #d1d5db;
+            text-decoration: none;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: color 0.2s;
+        }
+
+        .paper-link:last-child {
+            border-bottom: none;
+        }
+
+        .paper-link:hover {
+            color: #fff;
+        }
+
+        .paper-tag {
+            color: var(--accent-light);
+            font-weight: 500;
+        }
+
+        .paper-link em {
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            margin: 0 0 8px 0;
+            color: var(--text-primary);
+        }
+
+        /* ============================================
+           ULTIMATE "TODAY'S SHOW" EPISODE CARD
+           ============================================ */
+        
+        #episodeCard {
+            position: relative;
+            overflow: hidden;
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            border-radius: 24px;
+            padding: 32px 36px;
+            box-shadow: 
+                0 4px 30px rgba(0, 0, 0, 0.3),
+                0 0 80px rgba(139, 92, 246, 0.08);
+            margin: 0 auto 40px;
+            max-width: 1100px;
+            /* 3D tilt on hover */
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s ease;
+            transform-style: preserve-3d;
+        }
+
+        #episodeCard:hover {
+            transform: perspective(1000px) rotateX(1deg) rotateY(-1deg) translateY(-4px);
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.4),
+                0 0 100px rgba(139, 92, 246, 0.15);
+        }
+
+        /* Animated gradient mesh background */
+        #episodeCard::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 60%);
+            opacity: 0.6;
+            pointer-events: none;
+            animation: meshShift 15s ease-in-out infinite alternate;
+        }
+
+        @keyframes meshShift {
+            0% { background-position: 0% 0%, 100% 100%, 50% 50%; }
+            100% { background-position: 100% 100%, 0% 0%, 50% 50%; }
+        }
+
+        /* Edge glow on hover */
+        #episodeCard::after {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            border-radius: inherit;
+            background: linear-gradient(135deg, 
+                rgba(139, 92, 246, 0.4), 
+                transparent 40%, 
+                transparent 60%, 
+                rgba(236, 72, 153, 0.3));
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease-out;
+            z-index: -1;
+        }
+
+        #episodeCard:hover::after {
+            opacity: 1;
+        }
+
+        /* Top meta row */
+        .episode-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+            font-size: 0.8rem;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            animation: staggerFadeIn 0.5s ease forwards 0.1s;
+        }
+
+        .episode-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 9999px;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            background: radial-gradient(circle at left,
+                    rgba(139, 92, 246, 0.25),
+                    rgba(15, 23, 42, 0.95));
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+        }
+
+        .episode-pill-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 9999px;
+            background: #10b981;
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.8);
+            animation: livePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes livePulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.8); }
+        }
+
+        .episode-pill-separator {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .episode-pill-title {
+            color: #e5e7eb;
+            font-weight: 600;
+        }
+
+        .new-badge {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #000;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            animation: badgePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(251, 191, 36, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.8); }
+        }
+
+        .episode-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .episode-meta-chip {
+            padding: 4px 10px;
+            border-radius: 9999px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .episode-meta-dot {
+            opacity: 0.4;
+        }
+
+        /* Title + Summary */
+        .episode-title-main {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0 0 12px 0;
+            color: #fff;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            animation: staggerFadeIn 0.5s ease forwards 0.2s;
+        }
+
+        .episode-summary-main {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin: 0 0 24px 0;
+            max-width: 700px;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            animation: staggerFadeIn 0.5s ease forwards 0.3s;
+        }
+
+        /* Main row: audio vs agent */
+        .episode-main-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 28px;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            animation: staggerFadeIn 0.6s ease forwards 0.4s;
+        }
+
+        .episode-audio-stack {
+            flex: 1 1 300px;
+            opacity: 0;
+            animation: slideInLeft 0.6s ease forwards 0.5s;
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .episode-agent-stack {
+            flex: 0 0 300px;
+            max-width: 320px;
+            background: radial-gradient(circle at top left,
+                    rgba(139, 92, 246, 0.3),
+                    rgba(15, 23, 42, 0.98));
+            border-radius: 20px;
+            padding: 20px 22px 18px;
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            box-shadow: 
+                0 20px 60px rgba(15, 23, 42, 0.8),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            opacity: 0;
+            animation: slideInRight 0.6s ease forwards 0.6s;
+            /* Glowing border pulse */
+            position: relative;
+        }
+
+        .episode-agent-stack::before {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.5), rgba(236, 72, 153, 0.3));
+            opacity: 0;
+            z-index: -1;
+            animation: borderPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes borderPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        /* Now playing label */
+        .episode-now-playing {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 14px;
+        }
+
+        .now-playing-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #10b981;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .now-playing-icon {
+            font-size: 0.6rem;
+            animation: playBlink 1.5s ease-in-out infinite;
+        }
+
+        @keyframes playBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .now-playing-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        /* Upgraded player */
+        .player-controls.upgraded-player {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 16px;
+            padding: 14px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .play-btn-new {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+            flex-shrink: 0;
+        }
+
+        .play-btn-new:hover {
+            transform: scale(1.08);
+            box-shadow: 0 12px 35px rgba(139, 92, 246, 0.6);
+        }
+
+        .episode-wave-shell {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* Audio Waveform Visualization */
+        .waveform-container {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 32px;
+            gap: 3px;
+            padding: 0 4px;
+        }
+
+        .waveform-bar {
+            flex: 1;
+            height: var(--h);
+            background: linear-gradient(180deg, var(--accent-light), var(--accent));
+            border-radius: 2px;
+            opacity: 0.4;
+            transition: all 0.2s ease;
+            animation: waveAnim 1.2s ease-in-out infinite alternate;
+        }
+
+        .waveform-bar:nth-child(1) { animation-delay: 0s; }
+        .waveform-bar:nth-child(2) { animation-delay: 0.1s; }
+        .waveform-bar:nth-child(3) { animation-delay: 0.2s; }
+        .waveform-bar:nth-child(4) { animation-delay: 0.15s; }
+        .waveform-bar:nth-child(5) { animation-delay: 0.25s; }
+        .waveform-bar:nth-child(6) { animation-delay: 0.05s; }
+        .waveform-bar:nth-child(7) { animation-delay: 0.3s; }
+        .waveform-bar:nth-child(8) { animation-delay: 0.12s; }
+        .waveform-bar:nth-child(9) { animation-delay: 0.22s; }
+        .waveform-bar:nth-child(10) { animation-delay: 0.08s; }
+        .waveform-bar:nth-child(11) { animation-delay: 0.18s; }
+        .waveform-bar:nth-child(12) { animation-delay: 0.28s; }
+        .waveform-bar:nth-child(13) { animation-delay: 0.1s; }
+        .waveform-bar:nth-child(14) { animation-delay: 0.2s; }
+        .waveform-bar:nth-child(15) { animation-delay: 0.15s; }
+        .waveform-bar:nth-child(16) { animation-delay: 0.25s; }
+        .waveform-bar:nth-child(17) { animation-delay: 0.05s; }
+        .waveform-bar:nth-child(18) { animation-delay: 0.3s; }
+        .waveform-bar:nth-child(19) { animation-delay: 0.12s; }
+        .waveform-bar:nth-child(20) { animation-delay: 0.22s; }
+
+        @keyframes waveAnim {
+            0% { transform: scaleY(0.6); opacity: 0.4; }
+            100% { transform: scaleY(1); opacity: 0.9; }
+        }
+
+        .upgraded-player:hover .waveform-bar {
+            opacity: 0.8;
+            animation-duration: 0.6s;
+        }
+
+        .episode-time-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Speed pills */
+        .speed-pills {
+            display: flex;
+            gap: 6px;
+            margin-top: 12px;
+        }
+
+        .speed-pill {
+            padding: 4px 10px;
+            border-radius: 9999px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-secondary);
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .speed-pill:hover {
+            border-color: rgba(139, 92, 246, 0.5);
+            color: #fff;
+        }
+
+        .speed-pill.active {
+            background: rgba(139, 92, 246, 0.3);
+            border-color: rgba(139, 92, 246, 0.6);
+            color: #fff;
+        }
+
+        /* Tiny subcopy under player */
+        .episode-audio-subcopy {
+            margin-top: 14px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Agent panel */
+        .agent-header-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+
+        .agent-avatar-pulse {
+            position: relative;
+            width: 48px;
+            height: 48px;
+            border-radius: 9999px;
+            background: rgba(15, 23, 42, 0.96);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: visible;
+        }
+
+        .agent-avatar-emoji {
+            font-size: 1.6rem;
+            animation: brainThink 3s ease-in-out infinite;
+        }
+
+        @keyframes brainThink {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(-5deg) scale(1.05); }
+            75% { transform: rotate(5deg) scale(1.05); }
+        }
+
+        .agent-avatar-pulse::after {
+            content: "";
+            position: absolute;
+            inset: -5px;
+            border-radius: inherit;
+            border: 2px solid rgba(139, 92, 246, 0.6);
+            opacity: 0.7;
+            animation: pulseRing 2s ease-out infinite;
+        }
+
+        @keyframes pulseRing {
+            0% { transform: scale(0.9); opacity: 0.8; }
+            100% { transform: scale(1.3); opacity: 0; }
+        }
+
+        .agent-text-block {
+            flex: 1;
+        }
+
+        .agent-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            background: rgba(15, 23, 42, 0.85);
+            color: #c4b5fd;
+            border: 1px solid rgba(196, 181, 253, 0.4);
+            margin-bottom: 6px;
+        }
+
+        .agent-line {
+            font-size: 0.85rem;
+            color: #e5e7eb;
+            line-height: 1.4;
+        }
+
+        /* Persona pills */
+        .persona-pills {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .persona-pill {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 5px 10px;
+            border-radius: 9999px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(15, 23, 42, 0.8);
+            color: var(--text-secondary);
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .persona-pill:hover {
+            border-color: rgba(139, 92, 246, 0.5);
+            color: #fff;
+        }
+
+        .persona-pill.active {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.4), rgba(236, 72, 153, 0.3));
+            border-color: rgba(139, 92, 246, 0.6);
+            color: #fff;
+        }
+
+        /* Glowing interactive button */
+        .interactive-btn-glow {
+            width: 100%;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 20px;
+            font-size: 0.95rem;
+            box-shadow: 0 12px 35px rgba(124, 58, 237, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-btn-glow::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg,
+                    rgba(255, 255, 255, 0.3),
+                    transparent 40%,
+                    transparent 60%,
+                    rgba(255, 255, 255, 0.2));
+            opacity: 0;
+            transform: translateX(-100%);
+            transition: all 0.6s ease;
+        }
+
+        .interactive-btn-glow:hover::before {
+            opacity: 1;
+            transform: translateX(100%);
+        }
+
+        .interactive-icon {
+            font-size: 1.2rem;
+        }
+
+        .interactive-main {
+            font-weight: 600;
+        }
+
+        /* Quick chips under button */
+        .agent-quick-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 12px;
+        }
+
+        .quick-chip {
+            border: 1px solid rgba(226, 232, 240, 0.2);
+            background: rgba(15, 23, 42, 0.9);
+            color: #e5e7eb;
+            border-radius: 9999px;
+            padding: 6px 12px;
+            font-size: 0.72rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+            opacity: 0;
+            animation: chipPop 0.3s ease forwards;
+        }
+
+        .quick-chip:nth-child(1) { animation-delay: 0.7s; }
+        .quick-chip:nth-child(2) { animation-delay: 0.8s; }
+        .quick-chip:nth-child(3) { animation-delay: 0.9s; }
+        .quick-chip:nth-child(4) { animation-delay: 1s; }
+
+        @keyframes chipPop {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .quick-chip:hover {
+            background: rgba(139, 92, 246, 0.3);
+            border-color: rgba(139, 92, 246, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .surprise-chip {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(245, 158, 11, 0.2));
+            border-color: rgba(251, 191, 36, 0.4);
+        }
+
+        .surprise-chip:hover {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.4), rgba(245, 158, 11, 0.4));
+            border-color: rgba(251, 191, 36, 0.7);
+        }
+
+        /* Keyboard hints */
+        .keyboard-hints {
+            display: flex;
+            gap: 12px;
+            margin-top: 14px;
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.35);
+        }
+
+        .keyboard-hints kbd {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            margin-right: 4px;
+        }
+
+        /* Key takeaways */
+        .key-takeaways {
+            margin-top: 28px;
+            padding: 20px;
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 16px;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            animation: staggerFadeIn 0.5s ease forwards 0.8s;
+        }
+
+        .takeaways-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .takeaways-icon {
+            font-size: 1.1rem;
+        }
+
+        .takeaways-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .takeaways-list {
+            margin: 0;
+            padding-left: 20px;
+            color: #e5e7eb;
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+
+        .takeaways-list li {
+            position: relative;
+        }
+
+        .takeaways-list li::marker {
+            color: #10b981;
+        }
+
+        /* Paper preview strip */
+        .paper-preview-strip {
+            display: flex;
+            gap: 16px;
+            margin-top: 24px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            animation: staggerFadeIn 0.5s ease forwards 0.9s;
+        }
+
+        .paper-preview-card {
+            flex: 0 0 160px;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .paper-preview-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(139, 92, 246, 0.5);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .paper-preview-icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .paper-preview-tag {
+            display: inline-block;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            background: rgba(139, 92, 246, 0.2);
+            color: #c4b5fd;
+            margin-bottom: 8px;
+        }
+
+        .paper-preview-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .paper-preview-author {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+
+        /* Episode footer row */
+        .episode-footer-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            animation: staggerFadeIn 0.5s ease forwards 1s;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .episode-stats {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .stat-dot {
+            opacity: 0.4;
+        }
+
+        .episode-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .action-chip {
+            padding: 6px 12px;
+            border-radius: 9999px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.05);
+            color: #e5e7eb;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .action-chip:hover {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        /* Transcript panel */
+        .transcript-panel {
+            margin-top: 20px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+
+        .transcript-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 0.85rem;
+            color: #e5e7eb;
+        }
+
+        .transcript-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 4px 8px;
+        }
+
+        .transcript-close:hover {
+            color: #fff;
+        }
+
+        .transcript-content {
+            padding: 18px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        .transcript-content p {
+            margin: 0 0 12px 0;
+        }
+
+        .transcript-content strong {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        /* Stagger animation for elements */
+        @keyframes staggerFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive: stack on narrow screens */
+        @media (max-width: 768px) {
+            #episodeCard {
+                padding: 24px 20px;
+            }
+
+            .episode-main-row {
+                flex-direction: column;
+            }
+
+            .episode-agent-stack {
+                max-width: 100%;
+                flex: 1 1 auto;
+            }
+
+            .episode-top-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .paper-preview-strip {
+                flex-wrap: nowrap;
+            }
+
+            .episode-footer-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .persona-pills {
+                justify-content: center;
+            }
+        }
+
+        /* ============================================
+           THE FUTURE OF KOCHI - LIVING ROADMAP
+           ============================================ */
+        .future-roadmap-section {
+            margin-top: 100px;
+            position: relative;
+            padding-bottom: 150px;
+            width: 100%;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 24px;
+            padding-right: 24px;
+            box-sizing: border-box;
+        }
+
+        /* Section Header */
+        .future-header {
+            text-align: center;
+            margin-bottom: 60px;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .future-header.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .future-header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 9999px;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            color: #c4b5fd;
+            margin-bottom: 16px;
+        }
+
+        .future-badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.8);
+            animation: pulseDot 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 0.7; }
+        }
+
+        .future-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 0 0 16px 0;
+        }
+
+        .future-subtitle {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .future-hint {
+            display: block;
+            margin-top: 12px;
+            font-size: 0.8rem;
+            color: rgba(139, 92, 246, 0.8);
+            font-style: italic;
+        }
+
+        /* Band Structure */
+        .future-band {
+            margin-bottom: 80px;
+            position: relative;
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .future-band.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Stagger delay for bands */
+        .future-band[data-band="playground"] { transition-delay: 0.1s; }
+        .future-band[data-band="builder"] { transition-delay: 0.15s; }
+        .future-band[data-band="memory"] { transition-delay: 0.2s; }
+        .future-band[data-band="channels"] { transition-delay: 0.25s; }
+        .future-band[data-band="labs"] { transition-delay: 0.3s; }
+
+        .band-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 36px;
+        }
+
+        .band-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.4), transparent);
+        }
+
+        .band-line.labs {
+            background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.5), transparent);
+        }
+
+        .band-title {
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            color: #a5b4fc;
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        .band-title.labs {
+            color: #fbbf24;
+        }
+
+        /* Future Cards Row - Constellation Layout */
+        .future-cards-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 24px;
+            position: relative;
+        }
+
+        /* Honeycomb/Triangle offset pattern */
+        .future-cards-row .future-card {
+            flex: 0 0 calc(33.333% - 20px);
+            max-width: 360px;
+            min-width: 280px;
+        }
+
+        /* Offset every other card for constellation feel */
+        .future-cards-row .future-card:nth-child(1) {
+            transform: translateY(0);
+        }
+
+        .future-cards-row .future-card:nth-child(2) {
+            transform: translateY(30px);
+        }
+
+        .future-cards-row .future-card:nth-child(3) {
+            transform: translateY(-10px);
+        }
+
+        /* Stagger entrance for cards */
+        .future-card {
+            opacity: 0;
+            transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .future-band.visible .future-card {
+            opacity: 1;
+        }
+
+        .future-band.visible .future-card:nth-child(1) {
+            transition-delay: 0.1s;
+            transform: translateY(0);
+        }
+
+        .future-band.visible .future-card:nth-child(2) {
+            transition-delay: 0.2s;
+            transform: translateY(30px);
+        }
+
+        .future-band.visible .future-card:nth-child(3) {
+            transition-delay: 0.3s;
+            transform: translateY(-10px);
+        }
+
+        /* Connecting lines between cards */
+        .future-cards-row::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            right: 10%;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(139, 92, 246, 0.3) 20%, 
+                rgba(139, 92, 246, 0.5) 50%, 
+                rgba(139, 92, 246, 0.3) 80%, 
+                transparent 100%
+            );
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.8s ease 0.5s;
+        }
+
+        .future-band.visible .future-cards-row::before {
+            opacity: 1;
+        }
+
+        /* Node dots on the connecting line */
+        .future-cards-row::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #8b5cf6;
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.8);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.8s ease 0.6s;
+        }
+
+        .future-band.visible .future-cards-row::after {
+            opacity: 1;
+        }
+
+        /* Future Card Base */
+        .future-card {
+            position: relative;
+            background: radial-gradient(ellipse at top left, rgba(139, 92, 246, 0.15), rgba(15, 23, 42, 0.95));
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            border-radius: 20px;
+            padding: 24px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            transform: translateY(0);
+        }
+
+        .future-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(196, 181, 253, 0.6);
+            box-shadow: 0 25px 80px rgba(88, 28, 135, 0.4);
+        }
+
+        .future-card.labs-card {
+            background: radial-gradient(ellipse at top left, rgba(251, 191, 36, 0.1), rgba(15, 23, 42, 0.95));
+            border-color: rgba(251, 191, 36, 0.25);
+        }
+
+        .future-card.labs-card:hover {
+            border-color: rgba(251, 191, 36, 0.6);
+            box-shadow: 0 25px 80px rgba(180, 83, 9, 0.3);
+        }
+
+        /* Card Glow */
+        .card-glow {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.2), transparent 60%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+
+        .card-glow.labs {
+            background: radial-gradient(circle at 30% 30%, rgba(251, 191, 36, 0.15), transparent 60%);
+        }
+
+        .future-card:hover .card-glow {
+            opacity: 1;
+        }
+
+        /* Card Header */
+        .future-card-tag {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #a5b4fc;
+            margin-bottom: 10px;
+        }
+
+        .future-card-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            margin: 0 0 10px 0;
+        }
+
+        .card-emoji {
+            font-size: 1.3rem;
+        }
+
+        .future-card-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin: 0 0 16px 0;
+        }
+
+        /* Card Footer */
+        .future-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .status-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.65rem;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            border: 1px dashed rgba(148, 163, 184, 0.4);
+            color: #94a3b8;
+        }
+
+        .status-chip.labs {
+            border-color: rgba(251, 191, 36, 0.5);
+            color: #fbbf24;
+            background: rgba(251, 191, 36, 0.1);
+        }
+
+        .powered-by {
+            font-size: 0.65rem;
+            color: rgba(148, 163, 184, 0.7);
+        }
+
+        /* ============================================
+           DEMO CONTAINERS - LIVE ANIMATIONS
+           ============================================ */
+        .demo-container {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .demo-label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #64748b;
+            margin-bottom: 6px;
+        }
+
+        /* Demo: Builder (Typewriter) */
+        .demo-builder .demo-prompt-area {
+            margin-bottom: 12px;
+        }
+
+        .demo-typing-text {
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-size: 0.8rem;
+            color: #e5e7eb;
+            min-height: 40px;
+        }
+
+        .typing-cursor {
+            animation: cursorBlink 1s step-end infinite;
+            color: #8b5cf6;
+        }
+
+        @keyframes cursorBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .demo-output-area {
+            min-height: 100px;
+        }
+
+        .demo-thinking {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px;
+        }
+
+        .thinking-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #8b5cf6;
+            animation: thinkingPulse 1.4s ease-in-out infinite;
+        }
+
+        .thinking-dot:nth-child(2) { animation-delay: 0.2s; }
+        .thinking-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes thinkingPulse {
+            0%, 60%, 100% { opacity: 0.3; transform: scale(1); }
+            30% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .thinking-label {
+            font-size: 0.75rem;
+            color: #8b5cf6;
+            font-style: italic;
+        }
+
+        .demo-spec {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 10px;
+            padding: 12px;
+        }
+
+        .spec-header {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #10b981;
+            margin-bottom: 8px;
+        }
+
+        .spec-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .spec-item {
+            font-size: 0.75rem;
+            color: #e5e7eb;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+        }
+
+        .spec-bullet {
+            color: #10b981;
+        }
+
+        .demo-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+            font-size: 0.65rem;
+        }
+
+        .flow-node {
+            padding: 4px 10px;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #94a3b8;
+        }
+
+        .flow-node.active {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .flow-arrow {
+            color: #4b5563;
+        }
+
+        /* Demo: Share */
+        .demo-targets {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .target-chip {
+            padding: 6px 12px;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.7rem;
+            color: #94a3b8;
+            transition: all 0.2s ease;
+        }
+
+        .target-chip.active {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: rgba(139, 92, 246, 0.5);
+            color: #c4b5fd;
+        }
+
+        .demo-message-preview {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .channel-chip {
+            font-size: 0.7rem;
+            color: #a5b4fc;
+        }
+
+        .message-time {
+            font-size: 0.65rem;
+            color: #64748b;
+        }
+
+        .message-content {
+            font-size: 0.8rem;
+        }
+
+        .message-title {
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .message-bullet {
+            color: #cbd5e1;
+            font-size: 0.75rem;
+            margin-left: 8px;
+            opacity: 0;
+            animation: fadeInBullet 0.4s ease forwards;
+        }
+
+        .message-bullet:nth-child(2) { animation-delay: 0.3s; }
+        .message-bullet:nth-child(3) { animation-delay: 0.6s; }
+        .message-bullet:nth-child(4) { animation-delay: 0.9s; }
+
+        @keyframes fadeInBullet {
+            to { opacity: 1; }
+        }
+
+        .demo-cta-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border: none;
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .demo-cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Demo: Intuition (Story Panels) */
+        .demo-split {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .demo-math-side {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .math-text {
+            font-family: 'Courier New', monospace;
+            font-size: 0.7rem;
+            color: #64748b;
+            filter: blur(0.5px);
+        }
+
+        .demo-story-side {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .story-panel {
+            display: flex;
+            gap: 8px;
+            padding: 8px;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 8px;
+            opacity: 0;
+            animation: panelFadeIn 0.5s ease forwards;
+        }
+
+        .story-panel[data-panel="1"] { animation-delay: 0.2s; }
+        .story-panel[data-panel="2"] { animation-delay: 0.5s; }
+        .story-panel[data-panel="3"] { animation-delay: 0.8s; }
+
+        @keyframes panelFadeIn {
+            to { opacity: 1; }
+        }
+
+        .panel-num {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: rgba(139, 92, 246, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+            color: #c4b5fd;
+            flex-shrink: 0;
+        }
+
+        .panel-text {
+            font-size: 0.72rem;
+            color: #e5e7eb;
+            line-height: 1.4;
+        }
+
+        .demo-slider {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.65rem;
+            color: #64748b;
+        }
+
+        .slider-track {
+            flex: 1;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 9999px;
+            position: relative;
+        }
+
+        .slider-thumb {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #8b5cf6;
+            top: -4px;
+            animation: sliderMove 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes sliderMove {
+            0% { left: 10%; }
+            100% { left: 80%; }
+        }
+
+        /* Demo: Prototype (Terminal) */
+        .demo-project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .project-name {
+            font-size: 0.8rem;
+            color: #fff;
+        }
+
+        .stack-chips {
+            display: flex;
+            gap: 4px;
+        }
+
+        .stack-chip {
+            font-size: 0.6rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: rgba(139, 92, 246, 0.2);
+            color: #c4b5fd;
+        }
+
+        .demo-terminal {
+            background: #0f172a;
+            border-radius: 8px;
+            padding: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.7rem;
+            margin-bottom: 12px;
+        }
+
+        .terminal-line {
+            color: #10b981;
+            margin-bottom: 4px;
+            opacity: 0;
+            animation: terminalType 0.3s ease forwards;
+        }
+
+        .terminal-line[data-delay="0"] { animation-delay: 0.5s; }
+        .terminal-line[data-delay="1"] { animation-delay: 1s; }
+        .terminal-line[data-delay="2"] { animation-delay: 1.5s; }
+        .terminal-line[data-delay="3"] { animation-delay: 2s; }
+
+        @keyframes terminalType {
+            to { opacity: 1; }
+        }
+
+        .terminal-cursor {
+            color: #10b981;
+            animation: cursorBlink 1s step-end infinite;
+        }
+
+        .demo-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .demo-action-btn {
+            flex: 1;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: transparent;
+            color: #94a3b8;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .demo-action-btn.primary {
+            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+            border: none;
+            color: #fff;
+        }
+
+        .demo-action-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Demo: Swipe Cards */
+        .swipe-cards-stack {
+            position: relative;
+            height: 100px;
+            margin-bottom: 12px;
+        }
+
+        .swipe-card {
+            position: absolute;
+            width: 90%;
+            left: 5%;
+            border-radius: 12px;
+            padding: 12px;
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .swipe-card.back {
+            top: 0;
+            transform: scale(0.9);
+            opacity: 0.5;
+        }
+
+        .swipe-card.middle {
+            top: 10px;
+            transform: scale(0.95);
+            opacity: 0.7;
+        }
+
+        .swipe-card.front {
+            top: 20px;
+            transform: scale(1);
+            opacity: 1;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(30, 41, 59, 0.95));
+        }
+
+        .swipe-tag {
+            font-size: 0.6rem;
+            color: #a5b4fc;
+            margin-bottom: 4px;
+        }
+
+        .swipe-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .swipe-pitch {
+            font-size: 0.7rem;
+            color: #94a3b8;
+        }
+
+        .swipe-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .swipe-btn {
+            flex: 1;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: transparent;
+            color: #94a3b8;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+
+        .swipe-btn.dive {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: rgba(139, 92, 246, 0.4);
+            color: #c4b5fd;
+        }
+
+        /* Demo: Flashcard */
+        .flashcard-wrapper {
+            perspective: 1000px;
+            height: 120px;
+            margin-bottom: 10px;
+        }
+
+        .flashcard {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            animation: cardFlip 6s ease-in-out infinite;
+        }
+
+        @keyframes cardFlip {
+            0%, 45% { transform: rotateY(0deg); }
+            50%, 95% { transform: rotateY(180deg); }
+        }
+
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .flashcard-front {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(30, 41, 59, 0.95));
+            border: 1px solid rgba(139, 92, 246, 0.4);
+        }
+
+        .flashcard-back {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(30, 41, 59, 0.95));
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            transform: rotateY(180deg);
+        }
+
+        .flash-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #a5b4fc;
+            margin-bottom: 6px;
+        }
+
+        .flashcard-back .flash-label {
+            color: #10b981;
+        }
+
+        .flash-text {
+            font-size: 0.8rem;
+            color: #e5e7eb;
+            line-height: 1.5;
+        }
+
+        .flash-hint {
+            font-size: 0.65rem;
+            color: #64748b;
+            text-align: center;
+        }
+
+        /* Demo: Follow Researcher */
+        .author-chip {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .author-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(139, 92, 246, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .author-name {
+            flex: 1;
+            font-size: 0.85rem;
+            color: #fff;
+        }
+
+        .follow-toggle {
+            padding: 4px;
+        }
+
+        .toggle-track {
+            width: 36px;
+            height: 20px;
+            border-radius: 9999px;
+            background: rgba(16, 185, 129, 0.3);
+            position: relative;
+        }
+
+        .toggle-thumb {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #10b981;
+            top: 2px;
+            right: 2px;
+            box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+        }
+
+        .timeline-track {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            margin-bottom: 12px;
+            position: relative;
+        }
+
+        .timeline-track::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            right: 20px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .timeline-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #4b5563;
+            position: relative;
+            z-index: 1;
+        }
+
+        .timeline-dot.new {
+            background: #10b981;
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.8);
+        }
+
+        .timeline-dot.new.pulse {
+            animation: dotPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes dotPulse {
+            0%, 100% { box-shadow: 0 0 12px rgba(16, 185, 129, 0.8); }
+            50% { box-shadow: 0 0 20px rgba(16, 185, 129, 1); }
+        }
+
+        .dot-label {
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.55rem;
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .notification-bubble {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 10px;
+            animation: bubbleSlideIn 0.5s ease forwards;
+        }
+
+        @keyframes bubbleSlideIn {
+            from { transform: translateY(10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .notif-icon {
+            font-size: 1rem;
+        }
+
+        .notif-text {
+            font-size: 0.7rem;
+            color: #e5e7eb;
+        }
+
+        /* Demo: Taste Radar */
+        .taste-radar {
+            position: relative;
+            width: 100%;
+            height: 100px;
+            margin-bottom: 12px;
+        }
+
+        .radar-axis {
+            position: absolute;
+        }
+
+        .radar-axis.axis-x {
+            top: 50%;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+        }
+
+        .radar-axis.axis-y {
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .axis-label {
+            font-size: 0.6rem;
+            color: #64748b;
+        }
+
+        .radar-grid {
+            position: absolute;
+            inset: 10px 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .taste-blob {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #8b5cf6, transparent);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.8);
+            animation: blobMove 8s ease-in-out infinite;
+        }
+
+        @keyframes blobMove {
+            0% { top: 30%; left: 60%; }
+            25% { top: 40%; left: 70%; }
+            50% { top: 35%; left: 55%; }
+            75% { top: 45%; left: 65%; }
+            100% { top: 30%; left: 60%; }
+        }
+
+        .taste-result {
+            font-size: 0.7rem;
+            text-align: center;
+        }
+
+        .taste-label {
+            color: #64748b;
+        }
+
+        .taste-value {
+            color: #c4b5fd;
+        }
+
+        /* Demo: Mood */
+        .mood-buttons {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .mood-btn {
+            flex: 1;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: transparent;
+            color: #94a3b8;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .mood-btn.active {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: rgba(139, 92, 246, 0.5);
+            color: #c4b5fd;
+        }
+
+        .mood-description {
+            text-align: center;
+        }
+
+        .mood-quote {
+            font-size: 0.75rem;
+            color: #e5e7eb;
+            font-style: italic;
+        }
+
+        /* Demo: Channels Carousel */
+        .channels-carousel {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+        }
+
+        .channel-card {
+            flex: 0 0 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            padding: 12px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.2s ease;
+        }
+
+        .channel-card.active {
+            background: rgba(139, 92, 246, 0.15);
+            border-color: rgba(139, 92, 246, 0.4);
+        }
+
+        .channel-icon {
+            font-size: 1.5rem;
+        }
+
+        .channel-name {
+            font-size: 0.65rem;
+            color: #e5e7eb;
+            text-align: center;
+        }
+
+        .channel-tagline {
+            font-size: 0.7rem;
+            color: #64748b;
+            text-align: center;
+        }
+
+        /* Demo: Playlist */
+        .demo-playlist {
+            display: flex;
+            gap: 12px;
+        }
+
+        .playlist-cover {
+            width: 70px;
+            height: 70px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .cover-icon {
+            font-size: 1.5rem;
+        }
+
+        .cover-title {
+            font-size: 0.5rem;
+            color: #fff;
+            text-align: center;
+            padding: 0 4px;
+        }
+
+        .playlist-tracks {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .track-item {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .track-item.playing {
+            background: rgba(139, 92, 246, 0.2);
+            color: #c4b5fd;
+        }
+
+        /* Demo: Studio Wizard */
+        .wizard-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .wizard-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .step-num {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: #64748b;
+        }
+
+        .wizard-step.completed .step-num {
+            background: rgba(16, 185, 129, 0.3);
+            color: #10b981;
+        }
+
+        .wizard-step.active .step-num {
+            background: rgba(139, 92, 246, 0.3);
+            color: #c4b5fd;
+            box-shadow: 0 0 12px rgba(139, 92, 246, 0.5);
+        }
+
+        .step-label {
+            font-size: 0.6rem;
+            color: #64748b;
+        }
+
+        .wizard-step.active .step-label {
+            color: #c4b5fd;
+        }
+
+        .tone-pills {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+        }
+
+        .tone-pill {
+            padding: 6px 10px;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.65rem;
+            color: #94a3b8;
+        }
+
+        .tone-pill.active {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: rgba(139, 92, 246, 0.5);
+            color: #c4b5fd;
+        }
+
+        /* Demo: Voice Call */
+        .call-ui {
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .call-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .call-icon {
+            animation: phoneRing 1s ease-in-out infinite;
+        }
+
+        @keyframes phoneRing {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-10deg); }
+            75% { transform: rotate(10deg); }
+        }
+
+        .call-text {
+            font-size: 0.8rem;
+            color: #10b981;
+        }
+
+        .call-waveform {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            height: 24px;
+        }
+
+        .wave-bar {
+            width: 4px;
+            background: #8b5cf6;
+            border-radius: 2px;
+            animation: waveHeight 0.8s ease-in-out infinite;
+        }
+
+        .wave-bar:nth-child(1) { animation-delay: 0s; height: 8px; }
+        .wave-bar:nth-child(2) { animation-delay: 0.1s; height: 16px; }
+        .wave-bar:nth-child(3) { animation-delay: 0.2s; height: 24px; }
+        .wave-bar:nth-child(4) { animation-delay: 0.1s; height: 16px; }
+        .wave-bar:nth-child(5) { animation-delay: 0s; height: 8px; }
+
+        @keyframes waveHeight {
+            0%, 100% { transform: scaleY(0.5); }
+            50% { transform: scaleY(1); }
+        }
+
+        .call-transcript {
+            text-align: left;
+        }
+
+        .transcript-line {
+            font-size: 0.7rem;
+            margin-bottom: 6px;
+            padding: 6px 10px;
+            border-radius: 8px;
+        }
+
+        .transcript-line.user {
+            background: rgba(139, 92, 246, 0.2);
+            color: #e5e7eb;
+        }
+
+        .transcript-line.kochi {
+            background: rgba(255, 255, 255, 0.05);
+            color: #94a3b8;
+        }
+
+        /* Demo: Watch Party */
+        .party-progress {
+            position: relative;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin-bottom: 12px;
+        }
+
+        .progress-bar {
+            width: 45%;
+            height: 100%;
+            background: linear-gradient(90deg, #8b5cf6, #6366f1);
+            border-radius: 4px;
+            animation: progressMove 10s linear infinite;
+        }
+
+        @keyframes progressMove {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        .question-marker {
+            position: absolute;
+            top: -6px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #fbbf24;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: #000;
+            font-weight: bold;
+            transform: translateX(-50%);
+        }
+
+        .party-chat {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .chat-msg.kochi {
+            font-size: 0.75rem;
+            color: #e5e7eb;
+            margin-bottom: 8px;
+        }
+
+        .poll-votes {
+            display: flex;
+            gap: 12px;
+        }
+
+        .vote {
+            font-size: 0.7rem;
+            color: #94a3b8;
+        }
+
+        /* Demo: Drama */
+        .drama-curtain {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .review-bubble {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .reviewer {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #ef4444;
+        }
+
+        .review-text {
+            font-size: 0.75rem;
+            color: #e5e7eb;
+            font-style: italic;
+        }
+
+        .kochi-take {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .take-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #fbbf24;
+        }
+
+        .take-text {
+            font-size: 0.75rem;
+            color: #e5e7eb;
+        }
+
+        .drama-buttons {
+            text-align: center;
+        }
+
+        .drama-btn {
+            padding: 8px 16px;
+            border-radius: 9999px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border: none;
+            color: #fff;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        /* Card float animations after entrance */
+        .future-band.visible .future-card:nth-child(1) {
+            animation: floatCard1 8s ease-in-out infinite;
+            animation-delay: 0.5s;
+        }
+
+        .future-band.visible .future-card:nth-child(2) {
+            animation: floatCard2 9s ease-in-out infinite;
+            animation-delay: 0.7s;
+        }
+
+        .future-band.visible .future-card:nth-child(3) {
+            animation: floatCard3 10s ease-in-out infinite;
+            animation-delay: 0.9s;
+        }
+
+        @keyframes floatCard1 {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes floatCard2 {
+            0%, 100% { transform: translateY(30px); }
+            50% { transform: translateY(22px); }
+        }
+
+        @keyframes floatCard3 {
+            0%, 100% { transform: translateY(-10px); }
+            50% { transform: translateY(-18px); }
+        }
+
+        /* Labs section special styling */
+        .future-band[data-band="labs"] .future-cards-row::before {
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(251, 191, 36, 0.3) 20%, 
+                rgba(251, 191, 36, 0.5) 50%, 
+                rgba(251, 191, 36, 0.3) 80%, 
+                transparent 100%
+            );
+        }
+
+        .future-band[data-band="labs"] .future-cards-row::after {
+            background: #fbbf24;
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.8);
+        }
+
+        /* Responsive for Future Section */
+        @media (max-width: 1024px) {
+            .future-cards-row .future-card {
+                flex: 0 0 calc(50% - 16px);
+                max-width: none;
+            }
+
+            .future-cards-row .future-card:nth-child(1),
+            .future-cards-row .future-card:nth-child(2),
+            .future-cards-row .future-card:nth-child(3) {
+                transform: translateY(0);
+            }
+
+            .future-band.visible .future-card:nth-child(1),
+            .future-band.visible .future-card:nth-child(2),
+            .future-band.visible .future-card:nth-child(3) {
+                transform: translateY(0);
+            }
+
+        }
+
+        @media (max-width: 768px) {
+            .future-roadmap-section {
+                padding-left: 16px;
+                padding-right: 16px;
+                padding-bottom: 100px;
+            }
+
+            .future-cards-row {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .future-cards-row .future-card {
+                flex: 0 0 100%;
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .future-cards-row::before,
+            .future-cards-row::after {
+                display: none;
+            }
+
+            .demo-split {
+                grid-template-columns: 1fr;
+            }
+
+            .demo-playlist {
+                flex-direction: column;
+            }
+
+            .future-title {
+                font-size: 2rem;
+            }
+        }
+
+        .episode-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            color: #fff;
+        }
+
+        .episode-summary {
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .play-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: transform 0.2s;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .interactive-btn {
+            background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: white;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+            white-space: nowrap;
+        }
+
+        .interactive-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
+        }
+
+        .interactive-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Paper List */
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 24px;
+            margin-top: 60px;
+            color: var(--text-secondary);
+        }
+
+        .paper-item {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: rgba(19, 19, 43, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .paper-item:hover {
+            background: rgba(30, 30, 60, 0.6);
+            border-color: rgba(139, 92, 246, 0.3);
+            transform: translateX(4px);
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.1);
+        }
+
+        .paper-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .paper-title {
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #fff;
+            text-decoration: none;
+            display: block;
+            transition: all 0.2s;
+            font-size: 1.05rem;
+        }
+
+        .paper-title:hover {
+            color: var(--accent-light);
+            text-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+        }
+
+        .paper-meta {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+
+        .paper-desc {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #d1d5db;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .intro-strip {
+                flex-direction: column;
+                text-align: center;
+                padding: 40px 0;
+            }
+
+            .intro-content {
+                max-width: 100%;
+            }
+
+            .intro-poem {
+                text-align: left;
+                display: inline-block;
+            }
+
+            .phone-preview {
+                display: none;
+                /* Hide phone on smaller screens for now, or adjust */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Animated Background Canvas -->
+    <canvas id="kochiCanvas"></canvas>
+    
+    <div class="kochi-shell">
+        <!-- Top Header Bar -->
+        <header class="kochi-header animated-section anim-fadeDown">
+            <div class="kochi-brand">
+                <div class="kochi-logo">K</div>
+                <div class="kochi-brand-text">
+                    <span class="kochi-name">Kochi</span>
+                    <span class="kochi-tagline">SMS-native idea radio + after-show AI companion.</span>
+                </div>
+            </div>
+            <div class="sms-pill">
+                Text <strong>AI DAILY</strong> to <strong>+1 (555) 000-0000</strong>
+            </div>
+        </header>
+
+        <!-- ============================================
+             HERO INTRO SECTION
+             ============================================ -->
+        <section class="hero-intro">
+            <div class="hero-content">
+                <h1 class="hero-headline">
+                    Tiny idea radio.<br>
+                    <span class="gradient-text">Giant after-show brain.</span>
+                </h1>
+                <p class="hero-explainer">
+                    Kochi texts you a 60-second brief on frontier AI papers, plus an audio link.
+                    Then the after-show agent lets you ask dumb questions, founder questions, and
+                    deeply technical questions until the idea sticks.
+                </p>
+                <div class="hero-poem">
+                    <div class="poem-line">
+                        <span class="poem-bullet">✶</span>
+                        <span>Text AI DAILY when you are in motion.</span>
+                    </div>
+                    <div class="poem-line">
+                        <span class="poem-bullet">✶</span>
+                        <span>Get a brief, not a 30-tab inbox.</span>
+                    </div>
+                    <div class="poem-line">
+                        <span class="poem-bullet">✶</span>
+                        <span>Listen once, then argue with the episode.</span>
+                    </div>
+                    <div class="poem-line">
+                        <span class="poem-bullet">✶</span>
+                        <span>Turn research into things you could actually build.</span>
+                    </div>
+                </div>
+                <div class="hero-cta">
+                    <span>📲</span>
+                    <span>Text <strong>AI DAILY</strong> to <span class="phone-number">+1 (555) 000-0000</span> to try today's show.</span>
+                </div>
+            </div>
+
+            <div class="hero-phone">
+                <div class="phone-frame" id="kochiPhone">
+                    <div class="phone-notch"></div>
+                    <div class="phone-statusbar">
+                        <span>9:41</span>
+                        <span class="status-icons">
+                            <span>5G</span>
+                            <span>🔋</span>
+                        </span>
+                    </div>
+                    <div class="messages-inbox" id="phoneInbox">
+                        <div class="inbox-title">Messages</div>
+                        <div class="inbox-card pulse">
+                            <div class="inbox-meta">
+                                <div class="inbox-name">AI DAILY</div>
+                                <div class="inbox-preview">Tap to open Kochi</div>
+                            </div>
+                            <div class="inbox-time">now</div>
+                        </div>
+                    </div>
+                    <div class="conversation-view" id="phoneConversation" aria-hidden="true">
+                        <div class="conversation-header">
+                            <button class="back-pill">‹ Messages</button>
+                            <div class="contact-pill">
+                                <div class="contact-avatar">AI</div>
+                                <div class="contact-name">AI DAILY</div>
+                            </div>
+                            <div class="contact-actions">
+                                <span class="dot online"></span>
+                                <span class="contact-status">Active</span>
+                            </div>
+                        </div>
+                        <div class="imessage-log">
+                            <div class="imessage-bubble user" id="userBubble">
+                                <div class="bubble-label">You</div>
+                                <div class="bubble-text" id="userMessageText"></div>
+                            </div>
+                            <div class="typing-indicator" id="phoneTyping" aria-hidden="true">
+                                <span class="typing-dot"></span>
+                                <span class="typing-dot"></span>
+                                <span class="typing-dot"></span>
+                            </div>
+                            <div class="imessage-bubble kochi" id="aiBubble">
+                                <div class="bubble-label">AI Daily</div>
+                                <div class="bubble-text" id="aiDailyText"></div>
+                                <div class="phone-cta-chips" id="phoneCtas">
+                                    <a href="https://kochi.to/l/JMHm" target="_blank" rel="noreferrer noopener">Listen</a>
+                                    <a href="https://kochi.to/l/mvxf" target="_blank" rel="noreferrer noopener">Read report</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================
+             TEXT FIRST, WEB SECOND SECTION
+             ============================================ -->
+        <section class="text-first-section">
+            <div class="text-first-content">
+                <div class="section-eyebrow">PERSONALIZED AI AGENT OVER SMS</div>
+                <h2 class="text-first-title">Text first, web second.</h2>
+                <p class="text-first-body">
+                    Kochi was born as a phone contact, not a web app.
+                    These are the kinds of conversations we imagine people having with it —
+                    on commutes, late-night walks, or when they're itching to build.
+                </p>
+            </div>
+
+            <div class="chat-cards-container">
+                <!-- Commute Ping Card -->
+                <div class="chat-card">
+                    <div class="chat-card-header">
+                        <span class="card-emoji">🚇</span>
+                        <span>COMMUTE PING</span>
+                    </div>
+                    <div class="chat-card-messages">
+                        <div class="chat-bubble user-bubble">ai daily</div>
+                        <div class="chat-bubble kochi-bubble">Here's today's 60-sec brief + audio link.</div>
+                        <div class="chat-bubble user-bubble">founder mode tldr</div>
+                        <div class="chat-bubble kochi-bubble">One idea, who might pay, and a v0 spec you could ship.</div>
+                        <div class="typing-indicator-chat">
+                            <span class="typing-dot"></span>
+                            <span class="typing-dot"></span>
+                            <span class="typing-dot"></span>
+                            <span class="typing-label">kochi is thinking…</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Late-night Build Card -->
+                <div class="chat-card">
+                    <div class="chat-card-header">
+                        <span class="card-emoji">🌙</span>
+                        <span>LATE-NIGHT BUILD</span>
+                    </div>
+                    <div class="chat-card-messages">
+                        <div class="chat-bubble user-bubble">just one idea today</div>
+                        <div class="chat-bubble kochi-bubble">Got it. I'll pick the most builder-friendly one.</div>
+                        <div class="chat-bubble user-bubble">quiz me on the RL part</div>
+                        <div class="chat-bubble kochi-bubble">Okay, 5 questions. Let's see what stuck.</div>
+                        <div class="typing-indicator-chat">
+                            <span class="typing-dot"></span>
+                            <span class="typing-dot"></span>
+                            <span class="typing-dot"></span>
+                            <span class="typing-label">kochi is thinking…</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="container">
+            <!-- ============================================
+                 ULTIMATE "TODAY'S SHOW" EPISODE CARD
+                 ============================================ -->
+            <div class="episode-card animated-section anim-scale" id="episodeCard">
+                <!-- Top meta row -->
+                <div class="episode-top-row">
+                    <div class="episode-pill">
+                        <span class="episode-pill-dot"></span>
+                        <span class="episode-pill-label">Today's show</span>
+                        <span class="episode-pill-separator">•</span>
+                        <span class="episode-pill-title">AI Research Daily</span>
+                        <span class="new-badge">✨ NEW</span>
+                    </div>
+
+                    <div class="episode-meta">
+                        <span class="episode-meta-chip">⏱ 5-min listen</span>
+                        <span class="episode-meta-dot">•</span>
+                        <span class="episode-meta-date">Mon 11/18/2025</span>
+                    </div>
+                </div>
+
+                <!-- Title + tagline -->
+                <h2 class="episode-title-main">Tiny idea radio for today's AI papers.</h2>
+                <p class="episode-summary-main">
+                    🎙️ Learn how reinforcement learning masters Physics Olympiads in "P1", 
+                    then hop into Kochi's after-show agent to translate, critique, and turn it into things you could actually build.
+                </p>
+
+                <!-- Main split: audio capsule + after-show agent -->
+                <div class="episode-main-row">
+                    <!-- Left: Audio capsule -->
+                    <div class="episode-audio-stack">
+                        <div class="episode-now-playing">
+                            <span class="now-playing-label">
+                                <span class="now-playing-icon">▶</span> Now playing
+                            </span>
+                            <span class="now-playing-title">P1 · Physics Olympiad RL agent</span>
+                        </div>
+
+                        <div class="player-controls upgraded-player">
+                            <button class="play-btn-new" id="playBtnNew" aria-label="Play episode">
+                                <span class="play-icon">▶</span>
+                                <span class="pause-icon" style="display:none;">❚❚</span>
+                            </button>
+
+                            <div class="episode-wave-shell">
+                                <!-- Audio Waveform Visualization -->
+                                <div class="waveform-container">
+                                    <div class="waveform-bar" style="--h: 30%"></div>
+                                    <div class="waveform-bar" style="--h: 60%"></div>
+                                    <div class="waveform-bar" style="--h: 45%"></div>
+                                    <div class="waveform-bar" style="--h: 80%"></div>
+                                    <div class="waveform-bar" style="--h: 55%"></div>
+                                    <div class="waveform-bar" style="--h: 90%"></div>
+                                    <div class="waveform-bar" style="--h: 70%"></div>
+                                    <div class="waveform-bar" style="--h: 100%"></div>
+                                    <div class="waveform-bar" style="--h: 85%"></div>
+                                    <div class="waveform-bar" style="--h: 60%"></div>
+                                    <div class="waveform-bar" style="--h: 75%"></div>
+                                    <div class="waveform-bar" style="--h: 50%"></div>
+                                    <div class="waveform-bar" style="--h: 65%"></div>
+                                    <div class="waveform-bar" style="--h: 40%"></div>
+                                    <div class="waveform-bar" style="--h: 55%"></div>
+                                    <div class="waveform-bar" style="--h: 70%"></div>
+                                    <div class="waveform-bar" style="--h: 45%"></div>
+                                    <div class="waveform-bar" style="--h: 60%"></div>
+                                    <div class="waveform-bar" style="--h: 35%"></div>
+                                    <div class="waveform-bar" style="--h: 50%"></div>
+                                </div>
+                                <div class="episode-time-row">
+                                    <span class="episode-time-current">00:00</span>
+                                    <span class="episode-time-total">04:28</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Playback Speed Pills -->
+                        <div class="speed-pills">
+                            <button class="speed-pill" data-speed="0.5">0.5x</button>
+                            <button class="speed-pill active" data-speed="1">1x</button>
+                            <button class="speed-pill" data-speed="1.5">1.5x</button>
+                            <button class="speed-pill" data-speed="2">2x</button>
+                        </div>
+
+                        <p class="episode-audio-subcopy">
+                            Tap play to hear the 60-second brief. Everything below is what the after-show agent can help you unpack.
+                        </p>
+
+                        <!-- Hidden actual audio element -->
+                        <audio id="episodeAudio" style="display:none;">
+                            <source src="/static/audio/episode.mp3" type="audio/mpeg">
+                        </audio>
+                    </div>
+
+                    <!-- Right: After-show agent panel -->
+                    <div class="episode-agent-stack">
+                        <div class="agent-header-row">
+                            <div class="agent-avatar-pulse">
+                                <span class="agent-avatar-emoji">🧠</span>
+                            </div>
+                            <div class="agent-text-block">
+                                <div class="agent-chip">After-show agent</div>
+                                <div class="agent-line">
+                                    Ask Kochi to explain, critique, or turn this episode into a v0 you can ship.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Persona Mode Pills -->
+                        <div class="persona-pills">
+                            <button class="persona-pill active" data-mode="Plain English" onclick="setPersonaMode('Plain English')">
+                                <span>🎙</span> Plain English
+                            </button>
+                            <button class="persona-pill" data-mode="Founder" onclick="setPersonaMode('Founder')">
+                                <span>🪐</span> Founder
+                            </button>
+                            <button class="persona-pill" data-mode="Engineer" onclick="setPersonaMode('Engineer')">
+                                <span>🧱</span> Engineer
+                            </button>
+                        </div>
+
+                        <button class="interactive-btn interactive-btn-glow" id="interactiveBtn"
+                                onclick="openModal()" aria-label="Open interactive mode">
+                            <span class="interactive-icon">🎙️</span>
+                            <span class="interactive-main">Talk to the after-show brain</span>
+                        </button>
+
+                        <div class="agent-quick-row">
+                            <button class="quick-chip" onclick="sendQuickPrompt('Give me a 3-bullet TL;DR of this episode.')">
+                                📋 TL;DR
+                            </button>
+                            <button class="quick-chip" onclick="sendQuickPrompt('What should I build from this?')">
+                                🛠️ Build idea
+                            </button>
+                            <button class="quick-chip" onclick="sendQuickPrompt('Quiz me on this episode.')">
+                                🧠 Quiz me
+                            </button>
+                            <button class="quick-chip surprise-chip" onclick="sendSurprisePrompt()">
+                                🎲 Surprise me
+                            </button>
+                        </div>
+
+                        <!-- Keyboard hints -->
+                        <div class="keyboard-hints">
+                            <span><kbd>Space</kbd> play</span>
+                            <span><kbd>I</kbd> interactive</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Takeaways -->
+                <div class="key-takeaways">
+                    <div class="takeaways-header">
+                        <span class="takeaways-icon">📍</span>
+                        <span class="takeaways-title">What you'll learn</span>
+                    </div>
+                    <ul class="takeaways-list">
+                        <li>How P1 beats physics Olympiads without hints using RL</li>
+                        <li>Why multi-agent communication costs matter at scale</li>
+                        <li>The trick to scaling spatial AI in 3D scenes</li>
+                    </ul>
+                </div>
+
+                <!-- Paper Preview Cards -->
+                <div class="paper-preview-strip">
+                    <div class="paper-preview-card" onclick="askAboutPaper('Back to Basics: Let Denoising Generative Models Denoise')">
+                        <div class="paper-preview-icon">📄</div>
+                        <div class="paper-preview-tag">Diffusion</div>
+                        <div class="paper-preview-title">P1: Physics Olympiad</div>
+                        <div class="paper-preview-author">Tianhong Li, Kaiming He</div>
+                    </div>
+                    <div class="paper-preview-card" onclick="askAboutPaper('Cost-Effective Communication')">
+                        <div class="paper-preview-icon">📄</div>
+                        <div class="paper-preview-tag">Multi-agent</div>
+                        <div class="paper-preview-title">Cost-Effective Comms</div>
+                        <div class="paper-preview-author">Yijia Fan, et al.</div>
+                    </div>
+                    <div class="paper-preview-card" onclick="askAboutPaper('Scaling Spatial Intelligence')">
+                        <div class="paper-preview-icon">📄</div>
+                        <div class="paper-preview-tag">Spatial</div>
+                        <div class="paper-preview-title">Scaling Spatial Intel</div>
+                        <div class="paper-preview-author">Zhongang Cai, et al.</div>
+                    </div>
+                </div>
+
+                <!-- Episode Stats + Actions -->
+                <div class="episode-footer-row">
+                    <div class="episode-stats">
+                        <span class="stat-item">👂 847 listens</span>
+                        <span class="stat-dot">•</span>
+                        <span class="stat-item">💬 142 questions</span>
+                    </div>
+                    <div class="episode-actions">
+                        <button class="action-chip" onclick="copyEpisodeSummary()">
+                            📋 Copy summary
+                        </button>
+                        <button class="action-chip" onclick="shareEpisode()">
+                            🔗 Share
+                        </button>
+                        <button class="action-chip transcript-toggle" onclick="toggleTranscript()">
+                            📝 Transcript
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Hidden Transcript Panel -->
+                <div class="transcript-panel" id="transcriptPanel" style="display: none;">
+                    <div class="transcript-header">
+                        <span>📝 Episode Transcript</span>
+                        <button class="transcript-close" onclick="toggleTranscript()">✕</button>
+                    </div>
+                    <div class="transcript-content">
+                        <p><strong>00:00</strong> — Welcome to AI Research Daily. Today we're diving into three papers that caught my attention...</p>
+                        <p><strong>00:45</strong> — First up: P1, a physics Olympiad agent that uses reinforcement learning to solve competition-level problems...</p>
+                        <p><strong>02:15</strong> — Next, we look at cost-effective communication in multi-agent systems...</p>
+                        <p><strong>03:30</strong> — Finally, scaling spatial intelligence in 3D scenes...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- After-Show Lenses Section -->
+            <div class="animated-section anim-fadeUp" style="margin-top: 60px;">
+                <div class="header-subtitle" style="text-align: left;">HOW TO PLAY WITH THIS EPISODE</div>
+                <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.8rem; margin-bottom: 12px; color: #fff;">
+                    After-show lenses</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 32px;">Ask Kochi the way your brain works: as a
+                    founder, an engineer, or just a curious human.</p>
+
+                <div id="lensConversationCards">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Future Section -->
+            <!-- ============================================
+                 THE FUTURE OF KOCHI - LIVING ROADMAP
+                 ============================================ -->
+            <div class="future-roadmap-section" id="futureRoadmap">
+                <!-- Section Header -->
+                <div class="future-header animated-section anim-fadeUp">
+                    <div class="future-header-badge">
+                        <span class="future-badge-dot"></span>
+                        <span>PRODUCT ROADMAP</span>
+                    </div>
+                    <h2 class="future-title">The future of Kochi</h2>
+                    <p class="future-subtitle">
+                        These cards are proof-of-concept surfaces — everything I'd love to build on top of today's working Interactive Mode and SMS agent.
+                        <span class="future-hint">Scroll to explore each layer →</span>
+                    </p>
+                </div>
+
+                <!-- ═══════════════════════════════════════════
+                     BAND 1: AFTER-SHOW PLAYGROUND
+                     ═══════════════════════════════════════════ -->
+                <div class="future-band animated-section" data-band="playground">
+                    <div class="band-header">
+                        <div class="band-line"></div>
+                        <h3 class="band-title">AFTER-SHOW PLAYGROUND</h3>
+                        <div class="band-line"></div>
+                    </div>
+                    
+                    <div class="future-cards-row">
+                        <!-- Card 1: What should I build today? -->
+                        <article class="future-card demo-card" data-demo="builder">
+                            <div class="card-glow"></div>
+                            <div class="future-card-tag">Builder question</div>
+                            <h4 class="future-card-title">
+                                <span class="card-emoji">🚀</span>
+                                <span>What should I build today?</span>
+                            </h4>
+                            <p class="future-card-desc">Type one prompt. Kochi surfaces a single paper from this week and hands you a tiny, weekend-able v0 spec.</p>
+                            
+                            <!-- LIVE DEMO: Builder -->
+                            <div class="demo-container demo-builder">
+                                <div class="demo-prompt-area">
+                                    <div class="demo-label">Your prompt</div>
+                                    <div class="demo-typing-text" id="builderTyping">
+                                        <span class="typing-cursor">|</span>
+                                    </div>
+                                </div>
+                                <div class="demo-output-area">
+                                    <div class="demo-thinking">
+                                        <span class="thinking-dot"></span>
+                                        <span class="thinking-dot"></span>
+                                        <span class="thinking-dot"></span>
+                                        <span class="thinking-label">Picking paper...</span>
+                                    </div>
+                                    <div class="demo-spec" style="display:none;">
+                                        <div class="spec-header">📄 v0 Spec</div>
+                                        <ul class="spec-list">
+                                            <li class="spec-item"><span class="spec-bullet">•</span> <strong>Audience:</strong> small research teams</li>
+                                            <li class="spec-item"><span class="spec-bullet">•</span> <strong>Core loop:</strong> paper → product idea</li>
+                                            <li class="spec-item"><span class="spec-bullet">•</span> <strong>Stack:</strong> FastAPI · Next.js · OpenAI</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="demo-flow">
+                                    <span class="flow-node">Prompt</span>
+                                    <span class="flow-arrow">→</span>
+                                    <span class="flow-node">Paper</span>
+                                    <span class="flow-arrow">→</span>
+                                    <span class="flow-node active">v0 Spec</span>
+                                </div>
+                            </div>
+                            
+                            <div class="future-card-footer">
+                                <span class="status-chip concept">◇ Concept • Not wired (yet)</span>
+                                <span class="powered-by">Powered by: Builder lens</span>
+                            </div>
+                        </article>
+
+                        <!-- Card 2: Send this to my team -->
+                        <article class="future-card demo-card" data-demo="share">
+                            <div class="card-glow"></div>
+                            <div class="future-card-tag">Team share</div>
+                            <h4 class="future-card-title">
+                                <span class="card-emoji">📨</span>
+                                <span>Send this to my team</span>
+                            </h4>
+                            <p class="future-card-desc">Auto-compress an episode into a Slack/Discord-ready blurb with 3 bullets.</p>
+                            
+                            <!-- LIVE DEMO: Share -->
+                            <div class="demo-container demo-share">
+                                <div class="demo-targets">
+                                    <span class="target-chip active">💬 Slack</span>
+                                    <span class="target-chip">🎮 Discord</span>
+                                    <span class="target-chip">✉️ Email</span>
+                                </div>
+                                <div class="demo-message-preview">
+                                    <div class="message-header">
+                                        <span class="channel-chip">#ai-lab</span>
+                                        <span class="message-time">Just now</span>
+                                    </div>
+                                    <div class="message-content">
+                                        <div class="message-title">🎙️ Today: "Agents that don't melt at scale"</div>
+                                        <div class="message-bullet">• Cuts multi-agent costs ~40-60%</div>
+                                        <div class="message-bullet">• Smart routing vs bigger models</div>
+                                        <div class="message-bullet">• Test in RL playground this week</div>
+                                    </div>
+                                </div>
+                                <button class="demo-cta-btn">
+                                    <span>Copy & send</span>
+                                    <span class="cta-arrow">↗</span>
+                                </button>
+                            </div>
+                            
+                            <div class="future-card-footer">
+                                <span class="status-chip concept">◇ Concept • Not wired (yet)</span>
+                                <span class="powered-by">Ships as: /share command</span>
+                            </div>
+                        </article>
+
+                        <!-- Card 3: No-math intuition mode -->
+                        <article class="future-card demo-card" data-demo="intuition">
+                            <div class="card-glow"></div>
+                            <div class="future-card-tag">Explain like I'm 15</div>
+                            <h4 class="future-card-title">
+                                <span class="card-emoji">🧠</span>
+                                <span>No-math intuition mode</span>
+                            </h4>
+                            <p class="future-card-desc">Turn any episode into a story you could tell a younger sibling.</p>
+                            
+                            <!-- LIVE DEMO: Intuition -->
+                            <div class="demo-container demo-intuition">
+                                <div class="demo-split">
+                                    <div class="demo-math-side">
+                                        <div class="demo-label">From paper</div>
+                                        <div class="math-text">Let agents {a<sub>i</sub>} communicate over channel C with bandwidth B...</div>
+                                    </div>
+                                    <div class="demo-story-side">
+                                        <div class="story-panel" data-panel="1">
+                                            <div class="panel-num">1</div>
+                                            <div class="panel-text">Imagine 100 students trying to pass notes without shouting...</div>
+                                        </div>
+                                        <div class="story-panel" data-panel="2">
+                                            <div class="panel-num">2</div>
+                                            <div class="panel-text">This paper compresses notes so only important bits travel.</div>
+                                        </div>
+                                        <div class="story-panel" data-panel="3">
+                                            <div class="panel-num">3</div>
+                                            <div class="panel-text">Result: less noise, same coordination. ✨</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="demo-slider">
+                                    <span class="slider-label">Age</span>
+                                    <div class="slider-track">
+                                        <div class="slider-thumb"></div>
+                                    </div>
+                                    <span class="slider-range">10 ←→ 18</span>
+                                </div>
+                            </div>
+                            
+                            <div class="future-card-footer">
+                                <span class="status-chip concept">◇ Concept • Not wired (yet)</span>
+                                <span class="powered-by">Powered by: Interactive Mode</span>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+
+                <!-- ═══════════════════════════════════════════
+                     BAND 2: BUILDER TRACK
+                     ═══════════════════════════════════════════ -->
+                <div class="future-band animated-section" data-band="builder">
+                    <div class="band-header">
+                        <div class="band-line"></div>
+                        <h3 class="band-title">BUILDER TRACK</h3>
+                        <div class="band-line"></div>
+                    </div>
+                    
+                    <div class="future-cards-row">
+                        <!-- Card: Build this idea -->
+                        <article class="future-card demo-card" data-demo="prototype">
+                            <div class="card-glow"></div>
+                            <div class="future-card-tag">Micro-prototype</div>
+                            <h4 class="future-card-title">
+                                <span class="card-emoji">🛠️</span>
+                                <span>Build this idea</span>
+                            </h4>
+                            <p class="future-card-desc">Once a week, Kochi spins up a tiny FastAPI + Next.js starter from one paper.</p>
+                            
+                            <!-- LIVE DEMO: Prototype -->
+                            <div class="demo-container demo-prototype">
+                                <div class="demo-project-header">
+                                    <span class="project-name">📁 agents-office-hours</span>
+                                    <div class="stack-chips">
+                                        <span class="stack-chip">FastAPI</span>
+                                        <span class="stack-chip">Next.js</span>
+                                        <span class="stack-chip">OpenAI</span>
+                                    </div>
+                                </div>
+                                <div class="demo-terminal">
+                                    <div class="terminal-line" data-delay="0">✓ Created backend scaffold</div>
+                                    <div class="terminal-line" data-delay="1">✓ Wired /query endpoint</div>
+                                    <div class="terminal-line" data-delay="2">✓ Added episode context loader</div>
+                                    <div class="terminal-line" data-delay="3">✓ Wrote README.md</div>
+                                    <div class="terminal-cursor">_</div>
+                                </div>
+                                <div class="demo-actions">
+                                    <button class="demo-action-btn">Open repo</button>
+                                    <button class="demo-action-btn primary">Deploy →</button>
+                                </div>
+                            </div>
+                            
+                            <div class="future-card-footer">
+                                <span class="status-chip concept">◇ Concept • Not wired (yet)</span>
+                            </div>
+                        </article>
+
+                        <!-- Card: Paper speed dating -->
+                        <article class="future-card demo-card" data-demo="swipe">
+                            <div class="card-glow"></div>
+                            <div class="future-card-tag">Playful UI</div>
+                            <h4 class="future-card-title">
+                                <span class="card-emoji">🎛️</span>
+                                <span>Paper speed dating</span>
+                            </h4>
+                            <p class="future-card-desc">Swipe through today's papers. Skip, get the pitch, deep dive, or follow the author.</p>
+                            
+                            <!-- LIVE DEMO: Swipe -->
+                            <div class="demo-container demo-swipe">
+                                <div class="swipe-cards-stack">
+                                    <div class="swipe-card back">📄 Paper C</div>
+                                    <div class="swipe-card middle">📄 Paper B</div>
+                                    <div class="swipe-card front">
+                                        <div class="swipe-tag">Agents</div>
+                                        <div class="swipe-title">Cost-Effective Communication</div>
+                                        <div class="swipe-pitch">Cuts multi-agent costs 40-60%</div>
+                                    </div>
+                                </div>
+                                <div class="swipe-actions">
+                                    <button class="swipe-btn skip">← Skip</button>
+                                    <button class="swipe-btn dive">Deep dive →</button>
+                                </div>
+                            </div>
+                            
+                            <div class="future-card-footer">
+                                <span class="status-chip concept">◇ Concept • Not wired (yet)</span>
+                            </div>
+                        </article>
+
+                        <!-- Card: Flashcards -->
+                        <article class="future-card demo-card" data-demo="flash">
+                            <div class="card-glow"></div>
+                            <div class="future-card-tag">Web toys</div>
+                            <h4 class="future-card-title">
+                                <span class="card-emoji">🃏</span>
+                                <span>Flashcards & diagrams</span>
+                            </h4>
+                            <p class="future-card-desc">Turn an episode into flashcards, diagrams, or memes for study notes.</p>
+                            
+                            <!-- LIVE DEMO: Flashcard -->
+                            <div class="demo-container demo-flash">
+                                <div class="flashcard-wrapper">
+                                    <div class="flashcard">
+                                        <div class="flashcard-front">
+                                            <div class="flash-label">Q:</div>
+                                            <div class="flash-text">What problem does "cost-effective communication" solve?</div>
+                                        </div>
+                                        <div class="flashcard-back">
+                                            <div class="flash-label">A:</div>
+                                            <div class="flash-text">Makes multi-agent comm cheaper by compressing without losing coordination.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flash-hint">Tap to flip</div>
+                            </div>
+                            
+                            <div class="future-card-footer">
+                                <span class="status-chip concept">◇ Concept • Not wired (yet)</span>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+
+                <!-- ═══════════════════════════════════════════
+                     BAND 3: MEMORY & FOLLOW-THROUGH
+                     ═══════════════════════════════════════════ -->
+                <div class="future-band animated-section" data-band="memory">
+                    <div class="band-header">
+                        <div class="band-line"></div>
+                        <h3 class="band-title">MEMORY & FOLLOW-THROUGH</h3>
+                        <div class="band-line"></div>
+                    </div>
+                    
+                    <div class="future-cards-row">
+                        <!-- Card: Follow researcher -->
+                        <article class="future-card demo-card" data-demo="follow">
+                            <div class="card-glow"></div>
+                            <div class="future-card-tag">Signals</div>
+                            <h4 class="future-card-title">
+                                <span class="card-emoji">🔔</span>
+                                <span>Follow this researcher</span>
+                            </h4>
+                            <p class="future-card-desc">Tap an author. Kochi pings you with a 2-minute breakdown when they publish.</p>
+                            
+                            <!-- LIVE DEMO: Follow -->
+                            <div class="demo-container demo-follow">
+                                <div class="author-chip">
+                                    <span class="author-avatar">👤</span>
+                                    <span class="author-name">Yijia Fan</span>
+                                    <div class="follow-toggle">
+                                        <div class="toggle-track">
+                                            <div class="toggle-thumb"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="timeline-track">
+                                    <div class="timeline-dot old"></div>
+                                    <div class="timeline-dot old"></div>
+                                    <div class="timeline-dot new pulse">
+                                        <span class="dot-label">NEW</span>
+                                    </div>
+                                </div>
+                                <div class="notification-bubble">
+                                    <span class="notif-icon">🔔</span>
+                                    <span class="notif-text">New from Yijia Fan: "Cost-Effective Communication" — 2-min breakdown ready</span>
+                                </div>
+                            </div>
+                            
+                            <div class="future-card-footer">
+                                <span class="status-chip concept">◇ Concept • Not wired (yet)</span>
+                            </div>
+                        </article>
+
+                        <!-- Card: Taste profile -->
+                        <article class="future-card demo-card" data-demo="taste">
+                            <div class="card-glow"></div>
+                            <div class="future-card-tag">Taste profile</div>
+                            <h4 class="future-card-title">
+                                <span class="card-emoji">🧬</span>
+                                <span>Your brain on Kochi</span>
+                            </h4>
+                            <p class="future-card-desc">Kochi learns what you skip, replay, and ask about, then tilts future episodes toward your obsessions.</p>
+                            
+                            <!-- LIVE DEMO: Taste Radar -->
+                            <div class="demo-container demo-taste">
+                                <div class="taste-radar">
+                                    <div class="radar-axis axis-x">
+                                        <span class="axis-label left">Theory</span>
+                                        <span class="axis-label right">Build</span>
+                                    </div>
+                                    <div class="radar-axis axis-y">
+                                        <span class="axis-label top">Weird</span>
+                                        <span class="axis-label bottom">Canon</span>
+                                    </div>
+                                    <div class="radar-grid"></div>
+                                    <div class="taste-blob"></div>
+                                </div>
+                                <div class="taste-result">
+                                    <span class="taste-label">Your tilt:</span>
+                                    <span class="taste-value">60% builder, slightly weird, multi-agent focused</span>
+                                </div>
+                            </div>
+                            
+                            <div class="future-card-footer">
+                                <span class="status-chip concept">◇ Concept • Not wired (yet)</span>
+                            </div>
+                        </article>
+
+                        <!-- Card: Daily mood -->
+                        <article class="future-card demo-card" data-demo="mood">
+                            <div class="card-glow"></div>
+                            <div class="future-card-tag">Mood</div>
+                            <h4 class="future-card-title">
+                                <span class="card-emoji">🌡️</span>
+                                <span>Daily research mood</span>
+                            </h4>
+                            <p class="future-card-desc">Choose Hype / Skeptical / Just one idea, and Kochi changes the tone.</p>
+                            
+                            <!-- LIVE DEMO: Mood -->
+                            <div class="demo-container demo-mood">
+                                <div class="mood-buttons">
+                                    <button class="mood-btn" data-mood="hype">🔥 Hype</button>
+                                    <button class="mood-btn active" data-mood="skeptical">🤔 Skeptical</button>
+                                    <button class="mood-btn" data-mood="one">💡 Just one</button>
+                                </div>
+                                <div class="mood-description">
+                                    <span class="mood-quote">"Focus on papers with strong evals, clear baselines, and real ablations."</span>
+                                </div>
+                            </div>
+                            
+                            <div class="future-card-footer">
+                                <span class="status-chip concept">◇ Concept • Not wired (yet)</span>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+
+                <!-- ═══════════════════════════════════════════
+                     BAND 4: CHANNELS & PLAYLISTS
+                     ═══════════════════════════════════════════ -->
+                <div class="future-band animated-section" data-band="channels">
+                    <div class="band-header">
+                        <div class="band-line"></div>
+                        <h3 class="band-title">CHANNELS & PLAYLISTS</h3>
+                        <div class="band-line"></div>
+                    </div>
+                    
+                    <div class="future-cards-row">
+                        <!-- Card: More shows -->
+                        <article class="future-card demo-card" data-demo="channels">
+                            <div class="card-glow"></div>
+                            <div class="future-card-tag">Channels</div>
+                            <h4 class="future-card-title">
+                                <span class="card-emoji">📡</span>
+                                <span>More than one show</span>
+                            </h4>
+                            <p class="future-card-desc">AI Research Daily today. Soon: Agents Underground, Crypto Risk Daily, Founder Memos.</p>
+                            
+                            <!-- LIVE DEMO: Channels -->
+                            <div class="demo-container demo-channels">
+                                <div class="channels-carousel">
+                                    <div class="channel-card active">
+                                        <span class="channel-icon">🤖</span>
+                                        <span class="channel-name">AI Research Daily</span>
+                                    </div>
+                                    <div class="channel-card">
+                                        <span class="channel-icon">🕵️</span>
+                                        <span class="channel-name">Agents Underground</span>
+                                    </div>
+                                    <div class="channel-card">
+                                        <span class="channel-icon">💰</span>
+                                        <span class="channel-name">Crypto Risk Daily</span>
+                                    </div>
+                                    <div class="channel-card">
+                                        <span class="channel-icon">📝</span>
+                                        <span class="channel-name">Founder Memos</span>
+                                    </div>
+                                </div>
+                                <div class="channel-tagline">Each with its own after-show agent</div>
+                            </div>
+                            
+                            <div class="future-card-footer">
+                                <span class="status-chip concept">◇ Concept • Not wired (yet)</span>
+                            </div>
+                        </article>
+
+                        <!-- Card: Spotify for research -->
+                        <article class="future-card demo-card" data-demo="playlist">
+                            <div class="card-glow"></div>
+                            <div class="future-card-tag">Playlists</div>
+                            <h4 class="future-card-title">
+                                <span class="card-emoji">🎧</span>
+                                <span>Spotify-for-research</span>
+                            </h4>
+                            <p class="future-card-desc">Hit play on arcs like 'Efficiency Week', 'Benchmarks That Mattered', or 'MoE Only'.</p>
+                            
+                            <!-- LIVE DEMO: Playlist -->
+                            <div class="demo-container demo-playlist">
+                                <div class="playlist-cover">
+                                    <span class="cover-icon">📊</span>
+                                    <span class="cover-title">Benchmarks That Mattered</span>
+                                </div>
+                                <div class="playlist-tracks">
+                                    <div class="track-item">▶ MMLU Deep Dive</div>
+                                    <div class="track-item">▶ HumanEval Breakdown</div>
+                                    <div class="track-item playing">▶ GSM8K Reality Check</div>
+                                </div>
+                            </div>
+                            
+                            <div class="future-card-footer">
+                                <span class="status-chip concept">◇ Concept • Not wired (yet)</span>
+                            </div>
+                        </article>
+
+                        <!-- Card: Channel builder -->
+                        <article class="future-card demo-card" data-demo="studio">
+                            <div class="card-glow"></div>
+                            <div class="future-card-tag">Creator tools</div>
+                            <h4 class="future-card-title">
+                                <span class="card-emoji">🧪</span>
+                                <span>Channel builder</span>
+                            </h4>
+                            <p class="future-card-desc">Labs, funds, and writers plug in an RSS/arXiv feed and get their own Kochi show.</p>
+                            
+                            <!-- LIVE DEMO: Studio Wizard -->
+                            <div class="demo-container demo-studio">
+                                <div class="wizard-steps">
+                                    <div class="wizard-step completed">
+                                        <span class="step-num">1</span>
+                                        <span class="step-label">Drop RSS feed</span>
+                                    </div>
+                                    <div class="wizard-step active">
+                                        <span class="step-num">2</span>
+                                        <span class="step-label">Pick host tone</span>
+                                    </div>
+                                    <div class="wizard-step">
+                                        <span class="step-num">3</span>
+                                        <span class="step-label">Generate show</span>
+                                    </div>
+                                </div>
+                                <div class="tone-pills">
+                                    <span class="tone-pill">Chill lab friend</span>
+                                    <span class="tone-pill active">Ops-nerd</span>
+                                    <span class="tone-pill">Founder brain</span>
+                                </div>
+                            </div>
+                            
+                            <div class="future-card-footer">
+                                <span class="status-chip concept">◇ Concept • Not wired (yet)</span>
+                                <span class="powered-by">Ships as: Kochi Studio</span>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+
+                <!-- ═══════════════════════════════════════════
+                     BAND 5: KOCHI LABS EXPERIMENTS
+                     ═══════════════════════════════════════════ -->
+                <div class="future-band animated-section" data-band="labs">
+                    <div class="band-header">
+                        <div class="band-line labs"></div>
+                        <h3 class="band-title labs">🔬 KOCHI LABS EXPERIMENTS</h3>
+                        <div class="band-line labs"></div>
+                    </div>
+                    
+                    <div class="future-cards-row">
+                        <!-- Card: Phone call -->
+                        <article class="future-card demo-card labs-card" data-demo="voice">
+                            <div class="card-glow labs"></div>
+                            <div class="future-card-tag">Voice</div>
+                            <h4 class="future-card-title">
+                                <span class="card-emoji">📞</span>
+                                <span>Phone-in voice chat</span>
+                            </h4>
+                            <p class="future-card-desc">Call a number and talk live with the agent while the episode plays.</p>
+                            
+                            <!-- LIVE DEMO: Voice Call -->
+                            <div class="demo-container demo-voice">
+                                <div class="call-ui">
+                                    <div class="call-status">
+                                        <span class="call-icon">📞</span>
+                                        <span class="call-text">Connected to Kochi</span>
+                                    </div>
+                                    <div class="call-waveform">
+                                        <div class="wave-bar"></div>
+                                        <div class="wave-bar"></div>
+                                        <div class="wave-bar"></div>
+                                        <div class="wave-bar"></div>
+                                        <div class="wave-bar"></div>
+                                    </div>
+                                </div>
+                                <div class="call-transcript">
+                                    <div class="transcript-line user">"What does that last bit mean?"</div>
+                                    <div class="transcript-line kochi">"They prune communication without killing coordination."</div>
+                                </div>
+                            </div>
+                            
+                            <div class="future-card-footer">
+                                <span class="status-chip labs">🧪 Experiment</span>
+                            </div>
+                        </article>
+
+                        <!-- Card: Watch party -->
+                        <article class="future-card demo-card labs-card" data-demo="party">
+                            <div class="card-glow labs"></div>
+                            <div class="future-card-tag">Live</div>
+                            <h4 class="future-card-title">
+                                <span class="card-emoji">🎥</span>
+                                <span>Watch-party mode</span>
+                            </h4>
+                            <p class="future-card-desc">Listen with friends while Kochi drops questions and polls into the chat.</p>
+                            
+                            <!-- LIVE DEMO: Watch Party -->
+                            <div class="demo-container demo-party">
+                                <div class="party-progress">
+                                    <div class="progress-bar"></div>
+                                    <div class="question-marker" style="left: 30%">?</div>
+                                    <div class="question-marker" style="left: 65%">?</div>
+                                </div>
+                                <div class="party-chat">
+                                    <div class="chat-msg kochi">Poll: Do you buy their eval setup?</div>
+                                    <div class="poll-votes">
+                                        <span class="vote">👍 12</span>
+                                        <span class="vote">🤔 5</span>
+                                        <span class="vote">👎 2</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="future-card-footer">
+                                <span class="status-chip labs">🧪 Experiment</span>
+                            </div>
+                        </article>
+
+                        <!-- Card: Peer review drama -->
+                        <article class="future-card demo-card labs-card" data-demo="drama">
+                            <div class="card-glow labs"></div>
+                            <div class="future-card-tag">Spice</div>
+                            <h4 class="future-card-title">
+                                <span class="card-emoji">🔥</span>
+                                <span>Peer-review drama</span>
+                            </h4>
+                            <p class="future-card-desc">Hot takes, critiques, and follow-ups to spicy new papers.</p>
+                            
+                            <!-- LIVE DEMO: Drama -->
+                            <div class="demo-container demo-drama">
+                                <div class="drama-curtain">🎭</div>
+                                <div class="review-bubble">
+                                    <span class="reviewer">Reviewer 2:</span>
+                                    <span class="review-text">"This ablation is not convincing. Where's the strong baseline?"</span>
+                                </div>
+                                <div class="kochi-take">
+                                    <span class="take-label">Kochi's take:</span>
+                                    <span class="take-text">"Spicy. They over-claimed on robustness."</span>
+                                </div>
+                                <div class="drama-buttons">
+                                    <button class="drama-btn">Would you still ship it?</button>
+                                </div>
+                            </div>
+                            
+                            <div class="future-card-footer">
+                                <span class="status-chip labs">🧪 Experiment</span>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+
+                <!-- Connecting Lines Background -->
+                <div class="constellation-lines"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Interactive Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Interactive Mode</div>
+                <button class="close-btn" onclick="closeModal()" aria-label="Close modal">×</button>
+            </div>
+
+            <div class="chat-area" id="chatArea" role="log" aria-live="polite" aria-label="Chat messages">
+                <!-- Messages will be dynamically added here -->
+            </div>
+
+            <div class="input-area">
+                <div class="mode-selector" role="radiogroup" aria-label="Select response mode">
+                    <div class="mode-chip active" onclick="setMode('plain_english', this)" role="radio"
+                        aria-checked="true" tabindex="0">Plain English</div>
+                    <div class="mode-chip" onclick="setMode('founder_takeaway', this)" role="radio" aria-checked="false"
+                        tabindex="0">Founder</div>
+                    <div class="mode-chip" onclick="setMode('engineer_angle', this)" role="radio" aria-checked="false"
+                        tabindex="0">Engineer</div>
+                </div>
+
+                <!-- Role & Domain Inputs -->
+                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                    <input type="text" id="userRoleInput" placeholder="Your Role (e.g. Backend Eng)"
+                        style="flex: 1; padding: 8px; border: 1px solid rgba(255,255,255,0.1); background: #1f2937; color: white; border-radius: 8px; font-size: 0.9rem;">
+                    <input type="text" id="userDomainInput" placeholder="Domain (e.g. Python)"
+                        style="flex: 1; padding: 8px; border: 1px solid rgba(255,255,255,0.1); background: #1f2937; color: white; border-radius: 8px; font-size: 0.9rem;">
+                </div>
+
+                <!-- Learning Mode Buttons -->
+                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                    <button onclick="sendLearningPrompt('quiz')"
+                        style="flex: 1; padding: 6px; background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">📝
+                        Quiz me</button>
+                    <button onclick="sendLearningPrompt('self_explain')"
+                        style="flex: 1; padding: 6px; background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">👨‍🏫
+                        Let me explain</button>
+                </div>
+
+                <div class="input-row">
+                    <input type="text" id="queryInput" placeholder="Ask about this episode..."
+                        aria-label="Type your question">
+                    <button class="send-btn" onclick="handleSend()" aria-label="Send message">↑</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const phone = document.getElementById('kochiPhone');
+            if (!phone) return;
+
+            const conversation = document.getElementById('phoneConversation');
+            const userBubble = document.getElementById('userBubble');
+            const userText = document.getElementById('userMessageText');
+            const typingIndicator = document.getElementById('phoneTyping');
+            const aiBubble = document.getElementById('aiBubble');
+            const aiText = document.getElementById('aiDailyText');
+            const ctas = document.getElementById('phoneCtas');
+
+            const aiMessage = '🎙️ AI Research Daily — Discover the innovative concept of Kandinsky 5.0, a powerful family of foundation models for generating images and videos. Stay tuned for more groundbreaking AI research insights in today\'s AI Papers Daily!';
+
+            function resetStoryboard() {
+                userText.textContent = '';
+                aiText.textContent = '';
+                userBubble.classList.remove('bubble-visible');
+                aiBubble.classList.remove('bubble-visible');
+                typingIndicator.classList.remove('visible');
+                ctas.classList.remove('visible');
+                conversation.setAttribute('aria-hidden', 'true');
+                phone.classList.remove('contact-tapped', 'conversation-active');
+            }
+
+            function typeUserMessage(text, callback) {
+                userBubble.classList.add('bubble-visible');
+                userText.textContent = '';
+                let index = 0;
+                const interval = setInterval(() => {
+                    userText.textContent = text.slice(0, index + 1);
+                    index++;
+                    if (index === text.length) {
+                        clearInterval(interval);
+                        if (callback) {
+                            setTimeout(callback, 200);
+                        }
+                    }
+                }, 80);
+            }
+
+            function runStoryboard() {
+                resetStoryboard();
+                setTimeout(() => {
+                    phone.classList.add('contact-tapped');
+                }, 400);
+
+                setTimeout(() => {
+                    phone.classList.add('conversation-active');
+                    conversation.setAttribute('aria-hidden', 'false');
+                    typeUserMessage('ai daily', () => {
+                        typingIndicator.classList.add('visible');
+                        setTimeout(() => {
+                            typingIndicator.classList.remove('visible');
+                            aiBubble.classList.add('bubble-visible');
+                            aiText.textContent = aiMessage;
+                            setTimeout(() => ctas.classList.add('visible'), 250);
+                        }, 1400);
+                    });
+                }, 1300);
+            }
+
+            runStoryboard();
+            setInterval(runStoryboard, 15000);
+        })();
+    </script>
+
+    <!-- Background Animation (loads first) -->
+    <script src="/static/js/kochiBackground.js?v=3"></script>
+    
+    <!-- App Scripts -->
+    <script src="/static/js/api-client.js?v=3"></script>
+    <script src="/static/js/kochiContent.js?v=3"></script>
+    <script src="/static/js/app.js?v=6"></script>
+</body>
+
+</html>

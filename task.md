@@ -1,0 +1,48 @@
+# Task: Build Episode Companion Agent
+
+- [x] Brainstorming & Planning <!-- id: 0 -->
+    - [x] Create Implementation Plan <!-- id: 1 -->
+    - [x] Review Plan with User <!-- id: 2 -->
+- [x] Project Setup <!-- id: 3 -->
+    - [x] Create virtual environment (instructions only) <!-- id: 4 -->
+# Task: Build Episode Companion Agent
+
+- [x] Brainstorming & Planning <!-- id: 0 -->
+    - [x] Create Implementation Plan <!-- id: 1 -->
+    - [x] Review Plan with User <!-- id: 2 -->
+- [x] Project Setup <!-- id: 3 -->
+    - [x] Create virtual environment (instructions only) <!-- id: 4 -->
+    - [x] Create requirements.txt <!-- id: 5 -->
+    - [x] Create project structure <!-- id: 6 -->
+- [x] Implementation <!-- id: 7 -->
+    - [x] Implement `prompts.py` <!-- id: 8 -->
+    - [x] Implement `ingest.py` (Chunking & Vector Store) <!-- id: 9 -->
+    - [x] Implement `agent.py` (RAG & LLM Logic) <!-- id: 10 -->
+    - [x] Implement `main.py` (FastAPI Endpoints) <!-- id: 11 -->
+- [/] Verification <!-- id: 12 -->
+    - [x] Test Ingestion <!-- id: 13 -->
+    - [x] Test API Endpoints <!-- id: 14 -->
+    - [x] Create Walkthrough <!-- id: 15 -->
+- [x] Polishing <!-- id: 16 -->
+    - [x] Create Web UI (`static/index.html`) <!-- id: 17 -->
+    - [x] Serve UI from FastAPI <!-- id: 18 -->
+- [x] Enhance Demo <!-- id: 19 -->
+    - [x] Ingest Real Episode Data <!-- id: 20 -->
+    - [x] Match Kochi Brand UI <!-- id: 21 -->
+- [x] Comprehensive Testing <!-- id: 22 -->
+    - [x] Setup Test Environment (`pytest`) <!-- id: 23 -->
+    - [x] Unit Tests for Ingestion <!-- id: 24 -->
+    - [x] Unit Tests for Agent Logic <!-- id: 25 -->
+    - [x] Unit Tests for API <!-- id: 26 -->
+    - [x] Performance/Use Case Analysis <!-- id: 27 -->
+- [x] Production-Grade Enhancements <!-- id: 28 -->
+    - [x] Add /health endpoint <!-- id: 29 -->
+    - [x] Add GET /episodes listing <!-- id: 30 -->
+    - [x] Add POST /episodes/{id}/ingest (dynamic) <!-- id: 31 -->
+    - [x] Add CORS middleware <!-- id: 32 -->
+    - [x] Add comprehensive error handling <!-- id: 33 -->
+    - [x] Add API documentation (OpenAPI/Swagger) <!-- id: 34 -->
+    - [x] Add startup/shutdown logging <!-- id: 35 -->
+    - [x] Create production demo script <!-- id: 36 -->
+- [x] Run Application <!-- id: 37 -->
+    - [x] Start Backend & Frontend <!-- id: 38 -->
