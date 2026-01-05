@@ -22,7 +22,7 @@
 
 ---
 
-## 🚀 Overview![Uploading Screenshot 2025-11-24 235201.png…]()
+## 🚀 Overview!()
 
 
 **Imagine if your favorite research podcast could talk back to you—and actually understand the math.**
