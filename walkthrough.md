@@ -170,7 +170,7 @@ The Episode Companion Agent is **production-ready** and can be deployed as the b
 
 ---
 
-## 🎯 For Bart's Review
+## 🎯 For  Review
 
 **Key Highlights**:
 - Professional, Kochi-branded UI matching their design language
