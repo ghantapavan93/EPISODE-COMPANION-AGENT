@@ -12,13 +12,18 @@
 [![RAG: Hybrid](https://img.shields.io/badge/RAG-Hybrid_RRF-purple.svg)](https://arxiv.org/abs/2205.02255)
 [![Test Coverage: 100%](https://img.shields.io/badge/coverage-100%25-green.svg)](https://pytest.org)
 
-[View Demo](#-interactive-demo) • [Architecture Deep Dive](#-under-the-hood-engineering-excellence) • [Installation](#-quick-start)
+[🎥 Walkthrough Videos](#-walkthrough-videos-3-short-demos) • [Architecture Deep Dive](#-under-the-hood-engineering-excellence) • [Installation](#-quick-start)
 
-</div>
+
+</div><img width="1907" height="961" alt="Screenshot 2025-11-24 230847" src="https://github.com/user-attachments/assets/f58692fd-08fc-4539-9950-396c5d5e56a5" />
+<img width="822" height="361" alt="Screenshot 2025-11-24 235201" src="https://github.com/user-attachments/assets/a91b65f0-d05b-48d9-b79d-fb60b8409943" />
+<img width="1192" height="912" alt="Screenshot 2025-11-25 012653" src="https://github.com/user-attachments/assets/9db2e483-b729-41a4-a8cb-329f9defedd3" />
+<img width="1880" height="792" alt="image" src="https://github.com/user-attachments/assets/59122ed4-4516-496c-95f6-a107b9f2a4c3" />
 
 ---
 
-## 🚀 Overview
+## 🚀 Overview![Uploading Screenshot 2025-11-24 235201.png…]()
+
 
 **Imagine if your favorite research podcast could talk back to you—and actually understand the math.**
 
@@ -121,7 +126,21 @@ The system mimics a modern distributed application architecture, contained withi
 
 See the system in action. We've recorded a full walkthrough demonstrating the ingestion pipeline, persona switching, and response grounding.
 
-**[🎥 Watch the Full Walkthrough »](walkthrough.md)**
+## 🎥 Walkthrough Videos (3 short demos — watch at 2×)
+
+wouldn’t let me upload the raw files, so I put everything into one folder:
+
+▶ **Google Drive (all 3 videos):**
+https://drive.google.com/drive/folders/17lZpXvkvwgRxpwLyaLdKLrakauspVnXY?usp=sharing
+
+### 1) Episode_Companion_Agent_full_demo — the “after-show brain” in action
+Shows the Companion Agent behaving like a real after-show second brain: persona switching, grounded retrieval, and structured answers.
+
+### 2) Full_Website_demo — how it fits into “tiny idea radio, giant after-show brain”
+Shows the full site flow and how the Companion Agent becomes the interactive layer behind the episode experience.
+
+### 3) Website_Scroll — a fast skim of the entire UX
+A quick top-to-bottom tour so a first-time visitor understands the whole product in under a minute.
 
 ---
 
